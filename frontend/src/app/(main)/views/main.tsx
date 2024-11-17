@@ -5,7 +5,9 @@ export default function MainView() {
   return (
     <div className="flex flex-col items-center">
       <MusicPlayer />
-      <QueuePreview />
+      <div className="flex flex-col items-center w-full p-4">
+        <QueuePreview />
+      </div>
     </div>
   );
 }
