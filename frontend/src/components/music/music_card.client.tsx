@@ -1,4 +1,7 @@
+"use client";
 import Image from "next/image";
+import { useState } from "react";
+import { RiThumbUpFill, RiThumbUpLine } from "react-icons/ri";
 
 interface MusicCardProps {
   title: string;
@@ -15,6 +18,8 @@ export default function MusicCard({
   position,
   cover,
 }: MusicCardProps) {
+  const [isLiked, setIsLiked] = useState(false);
+
   return (
     <div className="flex justify-between items-center">
       <div className="flex gap-2 items-center">
@@ -34,6 +39,16 @@ export default function MusicCard({
             {artist} · {duration}
           </p>
         </div>
+      </div>
+      <div className="flex flex-col items-center">
+        <button onClick={() => setIsLiked((l) => !l)}>
+          {isLiked ? (
+            <RiThumbUpFill className="text-slate-900 w-6 h-6" />
+          ) : (
+            <RiThumbUpLine className="text-slate-900 w-6 h-6" />
+          )}
+        </button>
+        <p className="text-xs font-bold trext-black">6</p>
       </div>
     </div>
   );
