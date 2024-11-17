@@ -29,9 +29,9 @@ export default function MusicCard({
           className="rounded-md w-16 h-16"
         ></Image>
         <div className="flex flex-col gap-1 jusitfy-center">
-          <p className="text-lg font-bold text-black leading-none">{artist}</p>
+          <p className="text-lg font-bold text-black leading-none">{title}</p>
           <p className="text-lg font-medium text-slate-500">
-            {title} · {duration}
+            {artist} · {duration}
           </p>
         </div>
       </div>

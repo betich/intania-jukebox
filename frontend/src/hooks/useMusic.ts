@@ -6,6 +6,18 @@ const mockMusic = [
     cover: "https://placehold.co/150x150.png",
   },
   {
+    title: "Hey Jude",
+    artist: "The Beatles",
+    duration: "4:00",
+    cover: "https://placehold.co/150x150.png",
+  },
+  {
+    title: "APT.",
+    artist: "ROSÉ, Bruno Mars",
+    duration: "2:14",
+    cover: "https://placehold.co/150x150.png",
+  },
+  {
     title: "APT.",
     artist: "ROSÉ, Bruno Mars",
     duration: "2:14",
