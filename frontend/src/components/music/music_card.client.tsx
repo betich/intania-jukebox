@@ -7,8 +7,8 @@ interface MusicCardProps {
   title: string;
   artist: string;
   duration: string;
-  position: number;
   cover: string;
+  position?: number;
 }
 
 export default function MusicCard({
@@ -23,9 +23,11 @@ export default function MusicCard({
   return (
     <div className="flex justify-between items-center">
       <div className="flex gap-2 items-center">
-        <p className="font-medium w-4 text-2xl font-sans text-black">
-          {position}
-        </p>
+        {position && (
+          <p className="font-medium w-4 text-2xl font-sans text-black">
+            {position}
+          </p>
+        )}
         <Image
           src={cover}
           width={64}

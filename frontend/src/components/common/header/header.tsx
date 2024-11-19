@@ -1,4 +1,4 @@
-import Search from "./search";
+import Search from "../../search/search.client";
 
 export default function Header() {
   return (
