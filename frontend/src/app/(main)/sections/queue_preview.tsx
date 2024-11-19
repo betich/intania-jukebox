@@ -14,15 +14,8 @@ export default function QueuePreview() {
         <Button>ดูคิวทั้งหมด</Button>
       </div>
       <div className="flex flex-col w-full gap-4">
-        {music.map((m, i) => (
-          <MusicCard
-            key={`${i}-${m.title}`}
-            title={m.title}
-            artist={m.artist}
-            duration={m.duration}
-            position={i + 1}
-            cover={m.cover}
-          />
+        {music.map((m) => (
+          <MusicCard key={`${m.position}-${m.title}`} {...m} />
         ))}
       </div>
     </div>

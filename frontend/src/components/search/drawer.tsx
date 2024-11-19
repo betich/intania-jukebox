@@ -1,5 +1,5 @@
 import { useMusic } from "@/hooks/useMusic";
-import MusicCard from "../music/music_card.client";
+import MusicSearchCard from "./music_search_card.client";
 
 export default function SearchDrawer({ search }: { search: string }) {
   console.log("s", search);
@@ -10,8 +10,14 @@ export default function SearchDrawer({ search }: { search: string }) {
       <h1 className="text-xl font-lg">ค้นหาเพลง</h1>
 
       <div className="flex flex-col gap-2">
-        {music.map((m, i) => (
-          <MusicCard key={`${m.title}-${i}`} {...m} />
+        {music.map((m) => (
+          <MusicSearchCard
+            artist={m.artist}
+            cover={m.cover}
+            duration={m.duration}
+            key={m.position}
+            title={m.title}
+          />
         ))}
       </div>
     </div>

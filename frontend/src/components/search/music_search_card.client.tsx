@@ -1,31 +1,28 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
+import { BsPlusCircleFill } from "react-icons/bs";
 import { RiThumbUpFill, RiThumbUpLine } from "react-icons/ri";
 
-interface MusicCardProps {
+interface MusicSearchCardProps {
   title: string;
   artist: string;
   duration: string;
   cover: string;
-  position: number;
 }
 
-export default function MusicCard({
+export default function MusicSearchCard({
   title,
   artist,
   duration,
-  position,
   cover,
-}: MusicCardProps) {
+}: MusicSearchCardProps) {
+  const [inQueue, setInQueue] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
 
   return (
     <div className="flex justify-between items-center">
       <div className="flex gap-2 items-center">
-        <p className="font-medium w-4 text-2xl font-sans text-black">
-          {position}
-        </p>
         <Image
           src={cover}
           width={64}
@@ -41,14 +38,22 @@ export default function MusicCard({
         </div>
       </div>
       <div className="flex flex-col items-center">
-        <button onClick={() => setIsLiked((l) => !l)}>
-          {isLiked ? (
-            <RiThumbUpFill className="text-slate-900 w-6 h-6" />
-          ) : (
-            <RiThumbUpLine className="text-slate-900 w-6 h-6" />
-          )}
-        </button>
-        <p className="text-xs font-bold trext-black">6</p>
+        {inQueue ? (
+          <>
+            <button onClick={() => setIsLiked((l) => !l)}>
+              {isLiked ? (
+                <RiThumbUpFill className="text-slate-900 w-6 h-6" />
+              ) : (
+                <RiThumbUpLine className="text-slate-900 w-6 h-6" />
+              )}
+            </button>
+            <p className="text-xs font-bold trext-black">6</p>
+          </>
+        ) : (
+          <button onClick={() => setInQueue(true)}>
+            <BsPlusCircleFill className="text-slate-900 hover:text-slate-500 druation-300 ease-in-out transition-colors w-6 h-6" />
+          </button>
+        )}
       </div>
     </div>
   );
