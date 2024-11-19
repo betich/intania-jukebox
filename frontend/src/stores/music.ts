@@ -8,7 +8,7 @@ interface SongQueue {
   cover: string;
 }
 
-interface Song {
+export interface Song {
   title: string;
   artist: string;
   duration: string;

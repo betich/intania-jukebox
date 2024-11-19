@@ -34,15 +34,9 @@ export default function SearchDrawer({ search }: { search: string }) {
     <div className="w-full bg-white flex flex-col gap-4 absolute top-20 border border-gray-100 shadow-lg p-4 rounded-lg">
       <h1 className="text-xl font-lg">ค้นหาเพลง</h1>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         {mockMusic.map((m, i) => (
-          <MusicSearchCard
-            artist={m.artist}
-            cover={m.cover}
-            duration={m.duration}
-            key={`${i}-${m.title}`}
-            title={m.title}
-          />
+          <MusicSearchCard key={`${i}-${m.title}`} song={m} />
         ))}
       </div>
     </div>
