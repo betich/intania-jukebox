@@ -21,7 +21,13 @@ export default function MusicSearchCard({
   const [isLiked, setIsLiked] = useState(false);
 
   return (
-    <div className="flex justify-between items-center">
+    <button
+      onClick={() => {
+        if (inQueue) setIsLiked((l) => !l);
+        else setInQueue(true);
+      }}
+      className="flex bg-white px-2 py-2 rounded-lg duration-300 transition-all ease-in-out hover:bg-slate-100 hover:border-slate-400 border-white border justify-between items-center"
+    >
       <div className="flex gap-2 items-center">
         <Image
           src={cover}
@@ -30,9 +36,9 @@ export default function MusicSearchCard({
           alt={title}
           className="rounded-md w-16 h-16"
         ></Image>
-        <div className="flex flex-col gap-1 jusitfy-center">
+        <div className="flex flex-col gap-1 items-start justify-center">
           <p className="text-lg font-bold text-black leading-none">{title}</p>
-          <p className="text-lg font-medium text-slate-500">
+          <p className="text-base font-medium text-slate-500">
             {artist} · {duration}
           </p>
         </div>
@@ -40,21 +46,17 @@ export default function MusicSearchCard({
       <div className="flex flex-col items-center">
         {inQueue ? (
           <>
-            <button onClick={() => setIsLiked((l) => !l)}>
-              {isLiked ? (
-                <RiThumbUpFill className="text-slate-900 w-6 h-6" />
-              ) : (
-                <RiThumbUpLine className="text-slate-900 w-6 h-6" />
-              )}
-            </button>
+            {isLiked ? (
+              <RiThumbUpFill className="text-slate-900 w-6 h-6" />
+            ) : (
+              <RiThumbUpLine className="text-slate-900 w-6 h-6" />
+            )}
             <p className="text-xs font-bold trext-black">6</p>
           </>
         ) : (
-          <button onClick={() => setInQueue(true)}>
-            <BsPlusCircleFill className="text-slate-900 hover:text-slate-500 druation-300 ease-in-out transition-colors w-6 h-6" />
-          </button>
+          <BsPlusCircleFill className="text-slate-900 hover:text-slate-500 druation-300 ease-in-out transition-colors w-6 h-6" />
         )}
       </div>
-    </div>
+    </button>
   );
 }
