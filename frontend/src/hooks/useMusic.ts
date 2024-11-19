@@ -1,3 +1,7 @@
+"use client";
+import { useMusicStore } from "@/stores/music";
+import { useEffect } from "react";
+
 const mockMusic = [
   {
     title: "Something",
@@ -26,5 +30,16 @@ const mockMusic = [
 ];
 
 export function useMusic() {
-  return mockMusic;
+  const musicStore = useMusicStore();
+  const { music, setMusic, addMusic } = musicStore;
+
+  useEffect(() => {
+    // Fetch music from server
+    setMusic(mockMusic);
+  }, [setMusic]);
+
+  return {
+    music,
+    addMusic,
+  };
 }
