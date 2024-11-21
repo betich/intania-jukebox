@@ -41,6 +41,7 @@ export function testSchema(rawData: object): rawData is SpotifySearchResult {
     typeof rawData.tracks === "object" &&
     "items" in rawData.tracks &&
     Array.isArray(rawData.tracks.items) &&
+    rawData.tracks.items.length > 0 &&
     "name" in rawData.tracks.items[0] &&
     "duration_ms" in rawData.tracks.items[0] &&
     "album" in rawData.tracks.items[0] &&
