@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/common/button";
 import { H2 } from "@/components/common/typography";
-import MusicCard from "@/components/music/music_card.client";
+import { MusicCard } from "@/components/music";
 import { useMusic } from "@/hooks/useMusic";
 
 export default function QueuePreview() {

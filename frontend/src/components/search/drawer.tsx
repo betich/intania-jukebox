@@ -1,9 +1,9 @@
 "use client";
 import MusicSearchCard from "./music_search_card.client";
-import { useSpotify } from "@/hooks/useSpotify";
+import { useSpotifyQuery } from "@/hooks/useSpotifyQuery";
 
 export default function SearchDrawer({ search }: { search: string }) {
-  const { result } = useSpotify({ search });
+  const { result } = useSpotifyQuery({ search });
 
   return (
     <div className="w-full bg-white flex flex-col gap-4 absolute top-20 border border-gray-100 shadow-lg p-4 rounded-lg">

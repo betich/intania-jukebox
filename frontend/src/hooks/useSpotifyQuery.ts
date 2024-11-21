@@ -2,7 +2,7 @@ import { musicSearch } from "@/spotify/search";
 import { Song } from "@/stores/music";
 import { useEffect, useState } from "react";
 
-export const useSpotify = ({ search }: { search: string }) => {
+export const useSpotifyQuery = ({ search }: { search: string }) => {
   const [result, setResult] = useState<Song[]>([]);
 
   useEffect(() => {

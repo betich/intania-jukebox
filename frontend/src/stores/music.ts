@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 interface SongQueue {
   position: number;
@@ -22,24 +21,14 @@ interface MusicState {
   addMusic: (song: Song) => void;
 }
 
-export const useMusicStore = create<MusicState>()(
-  persist(
-    (set) => ({
-      music: [],
-      setMusic: (music) => {
-        const indexedMusic = music.map((m, i) => ({ ...m, position: i + 1 }));
-        set({ music: indexedMusic });
-      },
-      addMusic: (song) =>
-        set((state) => ({
-          music: [
-            ...state.music,
-            { ...song, position: state.music.length + 1 },
-          ],
-        })),
-    }),
-    {
-      name: "music",
-    }
-  )
-);
+export const useMusicStore = create<MusicState>((set) => ({
+  music: [],
+  setMusic: (music) => {
+    const indexedMusic = music.map((m, i) => ({ ...m, position: i + 1 }));
+    set({ music: indexedMusic });
+  },
+  addMusic: (song) =>
+    set((state) => ({
+      music: [...state.music, { ...song, position: state.music.length + 1 }],
+    })),
+}));
