@@ -41,10 +41,10 @@ export default function MusicSearchCard({ song }: MusicSearchCardProps) {
           className="rounded-md w-16 h-16"
         ></Image>
         <div className="flex flex-col gap-1 items-start justify-center">
-          <p className="text-lg font-bold text-black leading-none">
+          <p className="text-lg text-left font-bold text-black leading-none">
             {song.title}
           </p>
-          <p className="text-base font-medium text-slate-500">
+          <p className="text-base text-left font-medium text-slate-500">
             {song.artist} · {song.duration}
           </p>
         </div>
