@@ -24,6 +24,13 @@ interface SpotifySearchResult {
           width: number;
         }[];
       };
+      artists: {
+        id: string;
+        name: string;
+        type: "artist";
+        href: string;
+        uri: string;
+      }[];
     }[];
   };
   artists: unknown;
@@ -47,7 +54,9 @@ export function testSchema(rawData: object): rawData is SpotifySearchResult {
     "album" in rawData.tracks.items[0] &&
     "images" in rawData.tracks.items[0].album &&
     Array.isArray(rawData.tracks.items[0].album.images) &&
-    "url" in rawData.tracks.items[0].album.images[0]
+    "url" in rawData.tracks.items[0].album.images[0] &&
+    "artists" in rawData.tracks.items[0] &&
+    Array.isArray(rawData.tracks.items[0].artists)
   );
 }
 
@@ -71,7 +80,7 @@ function formatDuration(duration_ms: number): string {
 export function parseSpotifySearchResult(rawData: SpotifySearchResult): Song[] {
   return rawData.tracks.items.map((track) => ({
     title: track.name,
-    artist: track.album.name,
+    artist: track.artists.map((artist) => artist.name).join(", "),
     duration: formatDuration(track.duration_ms),
     cover: track.album.images[0].url,
   }));
