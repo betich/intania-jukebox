@@ -1,7 +1,7 @@
 "use server";
 import { Song } from "@/stores/music";
 import { fetchWebApi } from "./fetch.server";
-import { parseSpotifySearchResult, testSchema } from "./parse";
+import { parseSpotifySearchResult, testSchema } from "./adapter";
 
 export async function musicSearch(query: string): Promise<Song[]> {
   const spotifySearchResult = await fetchWebApi(
