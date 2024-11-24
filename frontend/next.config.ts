@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["placehold.co", "i.scdn.co"],
+    remotePatterns: [{ hostname: "placehold.co" }, { hostname: "i.scdn.co" }],
   },
 };
 
