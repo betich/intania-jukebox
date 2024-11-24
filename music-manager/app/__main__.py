@@ -1,3 +1,3 @@
-import app.main as main
+import app.run as run
 
-main.run()
+run.main()
