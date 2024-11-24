@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "frontend"
+    },
+    {
+      "path": "music-manager"
+    },
+    {
+      "path": "keypad"
+    }
+  ],
+  "settings": {}
+}
