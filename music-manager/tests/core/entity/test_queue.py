@@ -111,3 +111,5 @@ def test_remove_music_from_queue():
   # test remove non existing item
   with pytest.raises(Exception):
     queue_a.remove(queue_a.get_queue()[0])
+    
+  del queue_ag
