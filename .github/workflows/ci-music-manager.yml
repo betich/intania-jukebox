@@ -11,6 +11,9 @@ on:
 
 jobs:
   test:
+    defaults:
+      run:
+        working-directory: ./music-manager
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
