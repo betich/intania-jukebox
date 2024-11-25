@@ -112,4 +112,4 @@ def test_remove_music_from_queue():
   with pytest.raises(Exception):
     queue_a.remove(queue_a.get_queue()[0])
     
-  del queue_ag
+  del queue_a
