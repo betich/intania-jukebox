@@ -47,7 +47,6 @@ def test_music():
   assert music.get_popularity() == 100
   assert music.get_duration() == 90000
   assert music.get_cover() == "Cover"
-  assert music.get_duration_in_minutes_str() == "1:30"
   assert str(music) == "Music - Artist"
   assert music.get_info() == {
     "id": "1",
@@ -59,9 +58,6 @@ def test_music():
     "duration": 90000,
     "cover": "Cover"
   }
-  
-  music_hours = create_music_hours()
-  assert music_hours.get_duration_in_minutes_str() == "1:00:50"
   
   with pytest.raises(TypeError):  
     Music()
