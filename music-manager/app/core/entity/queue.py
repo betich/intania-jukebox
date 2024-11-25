@@ -1,16 +1,24 @@
 from app.core.entity.music import Music
 from typing import List
-import math
+import uuid
 
 class QueueItem():
   def __init__(self, music: Music, position: int, id: str = None, likes: int = 0):
-    self.id = id
+    if not music:
+      raise Exception("Music is required")
+    
+    if not id:
+      self.id = str(uuid.uuid4())
+    else:
+      self.id = id
+    
     self.music = music
     self.position = position
     self.likes = likes
     
+    
   def __str__(self) -> str:
-    return f"QueueItem: {self.music} - {self.position} - {self.likes}"
+    return f"QueueItem: {self.music} | pos: {self.position} | likes: {self.likes}"
   
   def get_id(self) -> str:
     return self.id
@@ -37,19 +45,27 @@ class QueueItem():
       "position": self.position,
       "likes": self.likes
     }
+    
+  def set_position(self, position: int) -> None:
+    self.position = position
 
 class Queue():
-  def __init__(self, queue=List[QueueItem]):
+  def __init__(self, queue:List[QueueItem] = []):
     self.queue = queue
     
   def __str__(self) -> str:
-    return f"Queue: {",".join(self.queue)}"
+    return f"Queue: {",".join([str(q) for q in self.queue])}"
   
   def get_queue(self) -> List[QueueItem]:
     return self.queue
   
-  def add(self, queue_item: QueueItem) -> None:
+  def _add(self, queue_item: QueueItem) -> None:
     self.queue.append(queue_item)
+    
+  def add_music(self, music: Music) -> None:
+    position = len(self.queue) + 1    
+    queue_item = QueueItem(music=music, position=position)
+    self._add(queue_item)
     
   def remove(self, queue_item: QueueItem) -> None:
     self.queue.remove(queue_item)
@@ -61,3 +77,6 @@ class Queue():
     
   def get_queue_length(self) -> int:
     return len(self.queue)
+  
+  def clear(self) -> None:
+    self.queue = []

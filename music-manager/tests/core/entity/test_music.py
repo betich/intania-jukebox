@@ -58,9 +58,11 @@ def test_music():
     "duration": 90000,
     "cover": "Cover"
   }
-  
+    
+def test_empty_music():
   with pytest.raises(TypeError):  
     Music()
   
+def test_music_without_album():  
   with pytest.raises(TypeError):
     create_music_without_album()
