@@ -1,26 +1,20 @@
-from app.core.entity.music import Music
+from app.core.entity.song import Song
 from typing import List
-import uuid
-from collections import deque
+from queue import PriorityQueue
 
 class MusicQueueItem():
-  def __init__(self, music: Music, id: str = None, likes: int = 0):
-    if not music:
+  def __init__(self, song: Song, likes: int = 0):
+    if not song:
       raise Exception("Music is required")
     
-    if not isinstance(music, Music):
+    if not isinstance(song, Song):
       raise Exception("Music should be an instance of Music")
     
-    if not id:
-      self.id = str(uuid.uuid4())
-    else:
-      self.id = id
-    
-    self.music = music
+    self.song = song
     self.likes = likes
     
   def __str__(self) -> str:
-    return f"(MusicQueueItem: {self.music} | likes: {self.likes})"
+    return f"(MusicQueueItem: {self.song} | likes: {self.likes})"
   
   def __eq__(self, other) -> bool:
     if not isinstance(other, MusicQueueItem):
@@ -28,52 +22,50 @@ class MusicQueueItem():
     
     return self.id == other.id
   
-  def get_id(self) -> str:
-    return self.id
-  
-  def get_music(self) -> Music:
-    return self.music
+  def get_song(self) -> Song:
+    return self.song
   
   def get_likes(self) -> int:
     return self.likes
     
-  def set_music(self, music: Music) -> None:
-    self.music = music
+  def set_song(self, song: Song) -> None:
+    self.song = song
   
   def set_likes(self, likes: int) -> None:
     self.likes = likes
 
 class MusicQueue():
   def __init__(self):
-    self.queue = deque()
+    self.queue = PriorityQueue()
     
   def __str__(self) -> str:
     items = [str(item) for item in self.queue]
     return f"MusicQueue: [{", ".join(items)}]"
   
   def get_queue(self) -> List[MusicQueueItem]:
-    return list(self.queue)
+    # sort by likes
+    return sorted(self.queue, key=lambda item: item.get_likes(), reverse=True)
   
   def get_queue_size(self) -> int:
-    return len(self.queue)
+    return self.queue.qsize()
   
-  def push(self, music: Music) -> None:
+  def push(self, music: Song) -> None:
     if not music:
       raise Exception("Music is required")
     
-    if not isinstance(music, Music):
+    if not isinstance(music, Song):
       raise Exception("Music should be an instance of Music")
     
-    self.queue.append(MusicQueueItem(music))
+    self.queue.put((0, MusicQueueItem(music)))
     
   def pop(self) -> MusicQueueItem:
-    return self.queue.pop()
+    return self.queue.get()
   
   def peek(self) -> MusicQueueItem:
     return self.queue[-1]
   
   def clear(self) -> None:
-    self.queue.clear()
+    self.queue.empty()
   
   def remove(self, id: str) -> None:
     if not id:

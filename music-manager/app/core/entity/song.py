@@ -1,4 +1,4 @@
-class Music():
+class Song():
   def __init__(self, id: str, title: str, artist: str, album: str, release_date: str, popularity: int, duration: int, cover: str):
     self.id = id
     self.title = title
@@ -14,7 +14,7 @@ class Music():
     return f"{self.title} - {self.artist}"
   
   def __eq__(self, other) -> bool:
-    if not isinstance(other, Music):
+    if not isinstance(other, Song):
       return False
     
     return self.id == other.id
