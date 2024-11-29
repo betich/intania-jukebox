@@ -1,4 +1,4 @@
-from app.core.entity.queue import Queue, QueueItem
+from app.core.entity.music_queue import MusicQueue, MusicQueueItem
 from app.core.entity.music import Music
 import uuid
 import pytest
@@ -19,97 +19,114 @@ def test_queue_item():
   music = create_music()
   
   # add queue item
-  queue_item = QueueItem(music=music, position=1, id=str(uuid.uuid4()), likes=0)
+  queue_item = MusicQueueItem(music=music, id=str(uuid.uuid4()), likes=0)
+  
+  # empty id should generate a new one
+  queue_item_empty_id = MusicQueueItem(music=music, likes=0)
+  assert queue_item_empty_id.get_id() != None
   
   assert queue_item.get_id() != None
   assert queue_item.get_music() == music
-  assert queue_item.get_position() == 1
   assert queue_item.get_likes() == 0
   
   # test empty music in queue item
   with pytest.raises(Exception):
-    queue_item = QueueItem(music=None, position=1, id=str(uuid.uuid4()), likes=0)
+    queue_item = MusicQueueItem(music=None, id=str(uuid.uuid4()), likes=0)
     
-  # test like
-  queue_item.like()
-  assert queue_item.get_likes() == 1
+  # test invalid music in queue item
+  with pytest.raises(Exception):
+    queue_item = MusicQueueItem(music={}, id=str(uuid.uuid4()), likes=0)
   
-  # test reset likes
-  queue_item.reset_likes()
-  assert queue_item.get_likes() == 0
-  
-  # test get info
-  assert queue_item.get_info() == {
-    "id": queue_item.get_id(),
-    "music": music.get_info(),
-    "position": 1,
-    "likes": 0
-  }
-  
-  assert str(queue_item) == f"QueueItem: {music} | pos: 1 | likes: 0"
+  assert str(queue_item) == f"(MusicQueueItem: {music} | likes: 0)"
 
-def test_add_music_to_queue():
+def test_push_queue():
   # user should be able to create a queue
-  queue = Queue()
+  queue = MusicQueue()
   assert queue.get_queue() == []
   
-  # user should be able to add music to the queue
+  # user should be able to set new queue
   music = create_music()
-  queue.add_music(music)
+  queue.push(music)
   
-  assert len(queue.get_queue()) == 1
-  assert queue.get_queue()[0].get_music() == music
-  assert queue.get_queue()[0].get_position() == 1
-  assert queue.get_queue()[0].get_likes() == 0
-  assert queue.get_queue()[0].get_id() != None
-  assert queue.get_queue()[0].get_info() == {
-    "id": queue.get_queue()[0].get_id(),
-    "music": music.get_info(),
-    "position": 1,
-    "likes": 0
-  }
-  
-  music_2 = Music(
-    id="2",
-    title="Music 2",
-    artist="Artist 2",
-    album="Album 2",
-    release_date="2021-01-01",
-    popularity=100,
-    duration=90000,
-    cover="https://cover.com"
-  )
-  
-  queue.add_music(music_2)
-  assert len(queue.get_queue()) == 2
-  
-  assert queue.get_queue()[1].get_music() == music_2
-  assert queue.get_queue()[1].get_position() == 2
-  assert queue.get_queue()[1].get_likes() == 0
-  assert queue.get_queue()[1].get_id() != None
-  assert queue.get_queue()[1].get_info() == {
-    "id": queue.get_queue()[1].get_id(),
-    "music": music_2.get_info(),
-    "position": 2,
-    "likes": 0
-  }
+  assert queue.queue[0].get_music() == music
   
   del queue
 
-def test_remove_music_from_queue():
-  # user should be able to remove music from the queue
-  queue_a = Queue()
-  music = create_music()
-  queue_a.add_music(music)
+def test_push_fail():
+  queue = MusicQueue()
   
-  assert len(queue_a.get_queue()) == 1
-  
-  queue_a.remove(queue_a.get_queue()[0])
-  
-  assert len(queue_a.get_queue()) == 0
-  
-  # test remove non existing item
   with pytest.raises(Exception):
-    queue_a.remove(queue_a.get_queue()[0])
+    queue.push(None)
+    queue.push({})
     
-  del queue_a
+  del queue
+    
+def test_pop_queue():
+  queue = MusicQueue()
+  music = create_music()
+  music_2 = create_music()
+  
+  queue.push(music)
+  queue.push(music_2)
+  
+  assert queue.pop().get_music() == music
+  assert queue.pop().get_music() == music_2
+  
+def test_peek_queue():
+  queue = MusicQueue()
+  music = create_music()
+  music_2 = create_music()
+  
+  queue.push(music)
+  queue.push(music_2)
+  
+  assert queue.peek().get_music() == music
+  
+  del queue
+  
+def test_clear_queue():
+  queue = MusicQueue()
+  music = create_music()
+  music_2 = create_music()
+  
+  queue.push(music)
+  queue.push(music_2)
+  
+  queue.clear()
+  
+  assert queue.get_queue() == []
+  
+  del queue
+  
+def test_queue_size():
+  queue = MusicQueue()
+  music = create_music()
+  music_2 = create_music()
+  
+  queue.push(music)
+  
+  assert queue.get_queue_size() == 1
+  
+  queue.push(music_2)
+  
+  assert queue.get_queue_size() == 2
+  
+  del queue
+  
+def test_queue_str():
+  queue = MusicQueue()
+  music = create_music()
+  music_2 = create_music()
+  
+  queue.push(music)
+  queue.push(music_2)
+  
+  assert str(queue) == f"MusicQueue: [(MusicQueueItem: {music} | likes: 0), (MusicQueueItem: {music_2} | likes: 0)]"
+  
+def test_queue_empty():
+  queue = MusicQueue()
+  
+  assert queue.get_queue() == []
+  assert queue.get_queue_size() == 0
+  
+  del queue
