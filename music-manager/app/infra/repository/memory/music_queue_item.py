@@ -1,8 +1,9 @@
 from app.core.entity.music_queue_item import MusicQueueItem
 from app.core.repository.music_queue_item import MusicQueueItemRepository
 from typing import List
+from app.utils.singleton import Singleton
 
-class MusicQueueItemRepository(MusicQueueItemRepository):
+class MusicQueueItemRepository(Singleton, MusicQueueItemRepository):
   def __init__(self):
     self._music_queue_item_list: List[MusicQueueItem] = []
     

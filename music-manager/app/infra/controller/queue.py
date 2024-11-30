@@ -1,80 +1,96 @@
 from flask import Blueprint,request
 
-from app.core.usecase.crud_music_queue_item import CRUDMusicQueueItem
 from app.core.mapper.music_queue_item import MusicQueueItemMapper
+from app.core.mapper.song import SongMapper
+from app.core.usecase.crud_music_queue_item import CRUDMusicQueueItem
+from app.core.usecase.music_queue import MusicQueueService
 
+from app.infra.repository.memory.song import SongRepository
 from app.infra.repository.memory.music_queue_item import MusicQueueItemRepository
 from app.infra.mapper.response.flask import FlaskResponseMapper
 
+from app.utils.logger import Logger
+logger = Logger()
+
 queue_controller = Blueprint('queue', __name__, url_prefix='/queue')
 
+song_repository = SongRepository()
 music_queue_item_repository = MusicQueueItemRepository()
-crud_music_queue_item = CRUDMusicQueueItem(music_queue_item_repository)
+crud_music_queue_item = CRUDMusicQueueItem(music_queue_item_repository, song_repository)
+
+music_queue_service = MusicQueueService(music_queue_item_repository)
 
 @queue_controller.route('/', methods=['GET'])
 def get_queue():
-  result = crud_music_queue_item.find_all()
-  
-  if not result:
-    return FlaskResponseMapper.resource_not_found("No music found in queue")
-  else:
-    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(result), "Success")
-  
-@queue_controller.route('/song', methods=['GET'])
-def get_music_queue_item():
-  result = crud_music_queue_item.find_all()
-  
-  if not result:
-    return FlaskResponseMapper.resource_not_found("No music found in queue")
-  else:
-    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(result), "Success")
-
-@queue_controller.route('/song/new', methods=['POST'])
-def create_music_queue_item():
-  data = request.json
-  
-  if not data or not all(key in data for key in ['song', 'likes']):
-    return FlaskResponseMapper.bad_request("Invalid keys. Expected: song, likes")
-  
   try:
-    result = crud_music_queue_item.create(MusicQueueItemMapper.from_request(data))
-    
-    if result is not None:
-      return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict(result), "Music added to queue")
-  
+    result = music_queue_service.get_queue()
+    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(result), "Found queue")
   except Exception as e:
+    logger.log_error(e)
+    return FlaskResponseMapper.bad_request(str(e))
+
+@queue_controller.route('/like/<id>', methods=['PUT'])
+def like_music_queue_item(id):
+  try:
+    music_queue_service.like_song(id)
+    return FlaskResponseMapper.success(None, "Song liked")
+  except Exception as e:
+    logger.log_error(e)
     return FlaskResponseMapper.bad_request(str(e))
   
+@queue_controller.route('/pop', methods=['DELETE'])
+def pop_music_queue_item():
+  try:
+    result = music_queue_service.pop()
+    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict(result), "Song popped")
+  except Exception as e:
+    logger.log_error(e)
+    return FlaskResponseMapper.bad_request(str(e))
+  
+@queue_controller.route('/clear', methods=['DELETE'])
+def clear_music_queue_item():
+  try:
+    music_queue_service.clear_queue()
+    return FlaskResponseMapper.success(None, "Queue cleared")
+  except Exception as e:
+    logger.log_error(e)
+    return FlaskResponseMapper.bad_request(str(e))
+  
+@queue_controller.route('/add', methods=['POST'])
+def add_song_to_queue():
+  data = request.json
+  
+  if not data or not any(key in data for key in ['song_id', 'song']):
+    return FlaskResponseMapper.bad_request("Invalid keys. Expected: song_id or song, likes")
+  
+  # either song_id or song, likes must be present, not both
+  try:
+    # song_id case
+    if 'song_id' in data and 'song' not in data:
+      result = crud_music_queue_item.create_by_id(data['song_id'])
+        
+      if result is not None:
+        queue_result = music_queue_service.get_queue()
+        return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(queue_result), "Music added to queue")
+    # song case
+    elif 'song' in data and 'song_id' not in data:
+      result = crud_music_queue_item.create_by_song(SongMapper.from_request(data['song']))
+      
+      if result is not None:
+        queue_result = music_queue_service.get_queue()
+        return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(queue_result), "Music added to queue")
+    
+  except Exception as e:
+    logger.log_error(e)
+    return FlaskResponseMapper.bad_request(str(e))
+    
   return FlaskResponseMapper.bad_request("There was an error adding the music to the queue")
-
-@queue_controller.route('/song/<id>', methods=['GET'])
-def get_music_queue_item_by_id(id):
-  result = crud_music_queue_item.find_by_id(id)
   
-  if result is None:
-    return FlaskResponseMapper.resource_not_found(f"Music id {id} not found")
-  else:
-    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict(result), "Success")
-
-@queue_controller.route('/song/<id>', methods=['PUT'])
-def update_music_queue_item(id):
-  data = request.json
-  
-  if not data or not all(key in data for key in ['song', 'likes']):
-    return FlaskResponseMapper.bad_request("Invalid keys. Expected: song, likes")
-  
+@queue_controller.route('/size', methods=['GET'])
+def get_queue_size():
   try:
-    result = crud_music_queue_item.update(id, data)
-    
-    if result is None:
-      return FlaskResponseMapper.resource_not_found(f"Music id {id} not found")
-    
-    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict(result), "Music updated")
-  
+    result = music_queue_service.get_queue_size()
+    return FlaskResponseMapper.success({"count": result}, "Queue size")
   except Exception as e:
+    logger.log_error(e)
     return FlaskResponseMapper.bad_request(str(e))
-  
-@queue_controller.route('/song/<id>', methods=['DELETE'])
-def delete_music_queue_item(id):
-  crud_music_queue_item.delete(id)
-  return FlaskResponseMapper.success(None, "Music deleted")

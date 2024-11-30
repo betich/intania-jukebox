@@ -6,6 +6,9 @@ from app.core.mapper.song import SongMapper
 from app.infra.repository.memory.song import SongRepository
 from app.infra.mapper.response.flask import FlaskResponseMapper
 
+from app.utils.logger import Logger
+logger = Logger()
+
 song_controller = Blueprint('song', __name__, url_prefix='/song')
 
 song_repository = SongRepository()
@@ -34,6 +37,7 @@ def create_queue():
       return FlaskResponseMapper.success(SongMapper.to_dict(result), "Song added to database")
   
   except Exception as e:
+    logger.log_error(e)
     return FlaskResponseMapper.bad_request(str(e))
   
   return FlaskResponseMapper.bad_request("There was an error adding the song")
@@ -63,6 +67,7 @@ def update_queue(id):
     return FlaskResponseMapper.success(SongMapper.to_dict(result), "Song updated")
   
   except Exception as e:
+    logger.log_error(e)
     return FlaskResponseMapper.bad_request(str(e))
 
 @song_controller.route('/<id>', methods=['DELETE'])

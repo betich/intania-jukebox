@@ -3,7 +3,6 @@ from typing import List
 from queue import PriorityQueue
 from app.core.entity.music_queue_item import MusicQueueItem
 
-
 class MusicQueue():
   def __init__(self):
     self.music_queue = PriorityQueue()

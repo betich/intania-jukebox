@@ -26,8 +26,14 @@ class MusicQueueItemMapper():
     return [MusicQueueItemMapper.to_dict(entity) for entity in entities]
     
   @staticmethod
-  def from_request(data: Dict) -> MusicQueueItem:
+  def from_request_song_entity(data: Dict) -> MusicQueueItem:
     return MusicQueueItemMapper.to_entity(data)
+  
+  @staticmethod
+  def from_request_song_id(data: Dict) -> str:
+    if 'song_id' not in data:
+      raise Exception("Invalid keys. Expected: song_id")
+    return data['song_id']
   
   @staticmethod
   def from_response(entity: MusicQueueItem) -> Dict:

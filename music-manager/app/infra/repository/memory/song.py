@@ -1,7 +1,8 @@
 from app.core.entity.song import Song
 from app.core.repository.song import SongRepository
+from app.utils.singleton import Singleton
 
-class SongRepository(SongRepository):
+class SongRepository(Singleton, SongRepository):
   def __init__(self):
     self._song_list = []
     
