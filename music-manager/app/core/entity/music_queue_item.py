@@ -1,8 +1,12 @@
 from app.core.entity.song import Song
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 
-@dataclass
+@dataclass(order=True)
 class MusicQueueItem():
+  likes: int
+  song: Song=field(compare=False)
+  
   def __init__(self, song: Song, likes: int = 0):
     if not song:
       raise Exception("Music is required")
@@ -21,18 +25,6 @@ class MusicQueueItem():
       return False
     
     return self.song.get_id() == other.song.get_id()
-  
-  def __gt__(self, other) -> bool:
-    if not isinstance(other, MusicQueueItem):
-      return False
-    
-    return self.likes > other.likes
-  
-  def __lt__(self, other) -> bool:
-    if not isinstance(other, MusicQueueItem):
-      return False
-    
-    return self.likes < other.likes
   
   def get_song(self) -> Song:
     return self.song

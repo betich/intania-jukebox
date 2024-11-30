@@ -12,8 +12,6 @@ class MusicQueue():
     return f"MusicQueue: [{", ".join(items)}]"
   
   def get_queue(self) -> List[MusicQueueItem]:
-    # sort by likes
-    # return sorted(self.music_queue.queue, key=lambda item: item.get_likes(), reverse=True)
     return self.music_queue.queue
   
   def get_queue_size(self) -> int:
