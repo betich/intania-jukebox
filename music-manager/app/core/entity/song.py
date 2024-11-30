@@ -37,7 +37,7 @@ class Song():
   def get_popularity(self) -> int:
     return self.popularity
   
-  def get_duration(self) -> str:
+  def get_duration(self) -> int:
     return self.duration
   
   def get_cover(self) -> str:
@@ -63,3 +63,7 @@ class Song():
 
   def set_cover(self, cover: str) -> None:
     self.cover = cover
+    
+  @staticmethod
+  def from_dict(data: dict):
+    return Song(data["id"], data["title"], data["artist"], data["album"], data["release_date"], data["popularity"], data["duration"], data["cover"])

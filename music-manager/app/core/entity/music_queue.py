@@ -33,6 +33,10 @@ class MusicQueueItem():
   
   def set_likes(self, likes: int) -> None:
     self.likes = likes
+    
+  @staticmethod
+  def from_dict(data: dict):
+    return MusicQueueItem(Song.from_dict(data["song"]), data["likes"])
 
 class MusicQueue():
   def __init__(self):
