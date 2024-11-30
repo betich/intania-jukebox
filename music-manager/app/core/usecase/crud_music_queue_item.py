@@ -13,6 +13,9 @@ class CRUDMusicQueueItem():
     return self.music_queue_item_repository.find_by_id(id)
 
   def create(self, music: MusicQueueItem) -> MusicQueueItem:
+    if self.music_queue_item_repository.find_by_id(music.song.get_id()):
+      raise Exception("Music already exists")
+    
     return self.music_queue_item_repository.create(music)
 
   def update(self, id: str, new_music: dict) -> MusicQueueItem | None:

@@ -30,13 +30,13 @@ def create_queue():
   try:
     result = crud_music_queue_item.create(MusicQueueItemMapper.from_request(data))
     
-    if result is None:
-      return FlaskResponseMapper.bad_request("Music already exists")
-    
-    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict(result), "Music added to queue")
+    if result is not None:
+      return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict(result), "Music added to queue")
   
   except Exception as e:
     return FlaskResponseMapper.bad_request(str(e))
+  
+  return FlaskResponseMapper.bad_request("There was an error adding the music to the queue")
 
 @queue_controller.route('/<id>', methods=['GET'])
 def get_queue_by_id(id):
