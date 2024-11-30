@@ -33,13 +33,19 @@ def get_queue():
 @queue_controller.route('/like/<id>', methods=['PUT'])
 def like_music_queue_item(id):
   try:
+    liked_music = music_queue_item_repository.find_by_id(id)
+    
+    if liked_music is None:
+      return FlaskResponseMapper.bad_request("Song not found")
+    
     music_queue_service.like_song(id)
-    return FlaskResponseMapper.success(None, "Song liked")
+    
+    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict(liked_music), "Song liked")
   except Exception as e:
     logger.log_error(e)
     return FlaskResponseMapper.bad_request(str(e))
   
-@queue_controller.route('/pop', methods=['DELETE'])
+@queue_controller.route('/pop', methods=['GET'])
 def pop_music_queue_item():
   try:
     result = music_queue_service.pop()
