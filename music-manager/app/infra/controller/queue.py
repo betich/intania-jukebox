@@ -20,15 +20,6 @@ def get_queue():
   else:
     return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(result), "Success")
 
-@queue_controller.route('/<id>', methods=['GET'])
-def get_queue_by_id(id):
-  result = crud_music_queue_item.find_by_id(id)
-  
-  if result is None:
-    return FlaskResponseMapper.resource_not_found(f"Music id {id} not found")
-  else:
-    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict(result), "Success")
-
 @queue_controller.route('/', methods=['POST'])
 def create_queue():
   data = request.json
@@ -46,6 +37,15 @@ def create_queue():
   
   except Exception as e:
     return FlaskResponseMapper.bad_request(str(e))
+
+@queue_controller.route('/<id>', methods=['GET'])
+def get_queue_by_id(id):
+  result = crud_music_queue_item.find_by_id(id)
+  
+  if result is None:
+    return FlaskResponseMapper.resource_not_found(f"Music id {id} not found")
+  else:
+    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict(result), "Success")
 
 @queue_controller.route('/<id>', methods=['PUT'])
 def update_queue(id):
