@@ -3,7 +3,7 @@ from flask import Blueprint,request
 from app.core.usecase.crud_music_queue_item import CRUDMusicQueueItem
 from app.core.mapper.music_queue_item import MusicQueueItemMapper
 
-from app.infra.repository.memory.music_queue import MusicQueueItemRepository
+from app.infra.repository.memory.music_queue_item import MusicQueueItemRepository
 from app.infra.mapper.response.flask import FlaskResponseMapper
 
 queue_controller = Blueprint('queue', __name__, url_prefix='/queue')
