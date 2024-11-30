@@ -1,4 +1,4 @@
-from app.core.entity.music_queue import MusicQueueItem
+from app.core.entity.music_queue_item import MusicQueueItem
 from app.core.entity.song import Song
 import pytest
 

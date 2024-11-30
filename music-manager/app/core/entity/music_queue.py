@@ -1,42 +1,8 @@
-from app.core.entity.song import Song
+
 from typing import List
 from queue import PriorityQueue
+from app.core.entity.music_queue_item import MusicQueueItem
 
-class MusicQueueItem():
-  def __init__(self, song: Song, likes: int = 0):
-    if not song:
-      raise Exception("Music is required")
-    
-    if not isinstance(song, Song):
-      raise Exception("Music should be an instance of Music")
-    
-    self.song = song
-    self.likes = likes
-    
-  def __str__(self) -> str:
-    return f"(MusicQueueItem: {self.song} | likes: {self.likes})"
-  
-  def __eq__(self, other) -> bool:
-    if not isinstance(other, MusicQueueItem):
-      return False
-    
-    return self.song.get_id() == other.song.get_id()
-  
-  def get_song(self) -> Song:
-    return self.song
-  
-  def get_likes(self) -> int:
-    return self.likes
-    
-  def set_song(self, song: Song) -> None:
-    self.song = song
-  
-  def set_likes(self, likes: int) -> None:
-    self.likes = likes
-    
-  @staticmethod
-  def from_dict(data: dict):
-    return MusicQueueItem(Song.from_dict(data["song"]), data["likes"])
 
 class MusicQueue():
   def __init__(self):

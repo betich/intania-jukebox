@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from app.core.entity.music_queue import MusicQueueItem
+from app.core.entity.music_queue_item import MusicQueueItem
 from typing import List
   
 class MusicQueueItemRepository(ABC):
@@ -8,7 +8,7 @@ class MusicQueueItemRepository(ABC):
     pass
 
   @abstractmethod
-  def find_by_id(self, id: int) -> MusicQueueItem | None:
+  def find_by_id(self, id: str) -> MusicQueueItem | None:
     pass
 
   @abstractmethod
@@ -16,10 +16,10 @@ class MusicQueueItemRepository(ABC):
     pass
   
   @abstractmethod
-  def update(self, id: int, new_music: dict) -> MusicQueueItem | None:
+  def update(self, id: str, new_music: dict) -> MusicQueueItem | None:
     pass
   
   @abstractmethod
-  def delete(self, id: int) -> None:
+  def delete(self, id: str) -> None:
     pass
   

@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+
+@dataclass
 class Song():
   def __init__(self, id: str, title: str, artist: str, album: str, release_date: str, popularity: int, duration: int, cover: str):
     self.id = id
@@ -63,7 +66,3 @@ class Song():
 
   def set_cover(self, cover: str) -> None:
     self.cover = cover
-    
-  @staticmethod
-  def from_dict(data: dict):
-    return Song(data["id"], data["title"], data["artist"], data["album"], data["release_date"], data["popularity"], data["duration"], data["cover"])

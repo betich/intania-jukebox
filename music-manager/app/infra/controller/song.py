@@ -1,6 +1,10 @@
 from flask import Blueprint,request
-from app.infra.repository.memory.song import SongRepository
+
 from app.core.usecase.crud_song import CRUDSong
+from app.core.mapper.song import SongMapper
+
+from app.infra.repository.memory.song import SongRepository
+from app.infra.mapper.response.flask import FlaskResponseMapper
 
 song_controller = Blueprint('song', __name__, url_prefix='/song')
 
@@ -9,22 +13,59 @@ crud_song = CRUDSong(song_repository)
 
 @song_controller.route('/', methods=['GET'])
 def get_queue():
-  return crud_song.find_all()
+  result = crud_song.find_all()
+  
+  if not result:
+    return FlaskResponseMapper.resource_not_found("No song found")
+  else:
+    return FlaskResponseMapper.success(SongMapper.to_dict_list(result), "Success")
 
 @song_controller.route('/<int:id>', methods=['GET'])
 def get_queue_by_id(id):
-  return crud_song.find_by_id(id)
+  result = crud_song.find_by_id(id)
+  
+  if result is None:
+    return FlaskResponseMapper.resource_not_found(f"Song id {id} not found")
+  else:
+    return FlaskResponseMapper.success(SongMapper.to_dict(result), "Success")
 
 @song_controller.route('/', methods=['POST'])
 def create_queue():
-  song = request.json
-  return crud_song.create()
+  data = request.json
+  
+  if not data or not all(key in data for key in ['title', 'artist', 'album', 'release_date', 'popularity', 'duration', 'cover']):
+    return FlaskResponseMapper.bad_request("Invalid keys. Expected: title, artist, album, release_date, popularity, duration, cover")
+  
+  try:
+    result = crud_song.create(SongMapper.from_request(data))
+    
+    if result is None:
+      return FlaskResponseMapper.bad_request("Song already exists")
+    
+    return FlaskResponseMapper.success(SongMapper.to_dict(result), "Song added to queue")
+  
+  except Exception as e:
+    return FlaskResponseMapper.bad_request(str(e))
 
 @song_controller.route('/<int:id>', methods=['PUT'])
 def update_queue(id):
-  new_music = request.json
-  return crud_song.update(id, new_music)
+  data = request.json
+  
+  if not data or not all(key in data for key in ['title', 'artist', 'album', 'release_date', 'popularity', 'duration', 'cover']):
+    return FlaskResponseMapper.bad_request("Invalid keys. Expected: title, artist, album, release_date, popularity, duration, cover")
+  
+  try:
+    result = crud_song.update(id, data)
+    
+    if result is None:
+      return FlaskResponseMapper.bad_request("Song not found")
+    
+    return FlaskResponseMapper.success(SongMapper.to_dict(result), "Song updated")
+  
+  except Exception as e:
+    return FlaskResponseMapper.bad_request(str(e))
 
 @song_controller.route('/<int:id>', methods=['DELETE'])
 def delete_queue(id):
-  return crud_song.delete(id)
+  crud_song.delete(id)
+  return FlaskResponseMapper.success(None, "Song deleted")

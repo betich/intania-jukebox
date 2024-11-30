@@ -7,7 +7,7 @@ class SongRepository(ABC):
     pass
 
   @abstractmethod
-  def find_by_id(self, id: int) -> Song:
+  def find_by_id(self, id: str) -> Song:
     pass
 
   @abstractmethod
@@ -15,9 +15,9 @@ class SongRepository(ABC):
     pass
   
   @abstractmethod
-  def update(self, music: Song) -> Song:
+  def update(self, id: str, music: Song) -> Song:
     pass
   
   @abstractmethod
-  def delete(self, id: int) -> None:
+  def delete(self, id: str) -> None:
     pass

@@ -1,4 +1,4 @@
-from app.core.entity.music_queue import MusicQueueItem
+from app.core.entity.music_queue_item import MusicQueueItem
 from app.core.repository.music_queue import MusicQueueItemRepository
 from typing import List
 
@@ -9,14 +9,14 @@ class CRUDMusicQueueItem():
   def find_all(self) -> List[MusicQueueItem]:
     return self.music_queue_item_repository.find_all()
 
-  def find_by_id(self, id: int) -> MusicQueueItem | None:
+  def find_by_id(self, id: str) -> MusicQueueItem | None:
     return self.music_queue_item_repository.find_by_id(id)
 
   def create(self, music: MusicQueueItem) -> MusicQueueItem:
     return self.music_queue_item_repository.create(music)
 
-  def update(self, id: int, new_music: dict) -> MusicQueueItem | None:
+  def update(self, id: str, new_music: dict) -> MusicQueueItem | None:
     return self.music_queue_item_repository.update(id, new_music)
 
-  def delete(self, id: int) -> None:
+  def delete(self, id: str) -> None:
     return self.music_queue_item_repository.delete(id)
