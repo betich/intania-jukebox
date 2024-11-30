@@ -18,12 +18,14 @@ class MusicQueueItemRepository(MusicQueueItemRepository):
     self._music_queue_item_list.append(music)
     return music
   
-  def update(self, music: MusicQueueItem) -> MusicQueueItem:
-    for index, m in enumerate(self._music_queue_item_list):
-      if m.id == music.id:
-        self._music_queue_item_list[index] = music
-        return music
-    return None
+  def update(self, id: int, new_music: dict) -> MusicQueueItem:
+    # change the music queue item with the given id by the key-value pairs in new_music
+    for _, item in enumerate(self._music_queue_item_list):
+      if item.id == id:
+        for key, value in new_music.items():
+          if hasattr(item, key):
+            setattr(item, key, value)
+        return item
   
   def delete(self, id: int) -> None:
     for index, item in enumerate(self._music_queue_item_list):

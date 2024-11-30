@@ -22,7 +22,7 @@ def create_song_without_album():
     popularity=100,
     duration=3650000,
     cover="Cover"
-  )
+  ) # type: ignore
 
 def test_song():
   music = create_song()
@@ -59,7 +59,7 @@ def test_edit_song():
     
 def test_empty_song():
   with pytest.raises(TypeError):  
-    Song()
+    Song() # type: ignore
   
 def test_song_without_album():  
   with pytest.raises(TypeError):

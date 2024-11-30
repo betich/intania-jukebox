@@ -15,7 +15,7 @@ class MusicQueueItemRepository(ABC):
     pass
   
   @abstractmethod
-  def update(self, music: MusicQueueItem) -> MusicQueueItem:
+  def update(self, id: int, new_music: dict) -> MusicQueueItem:
     pass
   
   @abstractmethod

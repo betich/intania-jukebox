@@ -61,20 +61,5 @@ class MusicQueue():
   def pop(self) -> MusicQueueItem:
     return self.queue.get()
   
-  def peek(self) -> MusicQueueItem:
-    return self.queue[-1]
-  
   def clear(self) -> None:
     self.queue.empty()
-  
-  def remove(self, id: str) -> None:
-    if not id:
-      raise Exception("ID is required")
-    
-    for item in self.queue:
-      if item.get_id() == id:
-        self.queue.remove(item)
-        return
-      
-    raise Exception("Item not found")
-  

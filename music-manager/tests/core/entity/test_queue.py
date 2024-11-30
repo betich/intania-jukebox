@@ -1,4 +1,4 @@
-from app.core.entity.music_queue import MusicQueue, MusicQueueItem
+from app.core.entity.music_queue import MusicQueueItem
 from app.core.entity.song import Song
 import pytest
 
@@ -25,11 +25,11 @@ def test_queue_item():
   
   # test empty music in queue item
   with pytest.raises(Exception):
-    queue_item = MusicQueueItem(song=None, likes=0)
+    queue_item = MusicQueueItem(song=None, likes=0) # type: ignore
     
   # test invalid music in queue item
   with pytest.raises(Exception):
-    queue_item = MusicQueueItem(song={}, likes=0)
+    queue_item = MusicQueueItem(song={}, likes=0) # type: ignore
   
-  assert str(queue_item) == f"(MusicQueueItem: {song} | likes: 0)"
+  assert str(queue_item) == f"(MusicQueueItem: {song} | likes: 0)"#
 
