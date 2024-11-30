@@ -8,7 +8,7 @@ class SongRepository(SongRepository):
   def find_all(self) -> list[Song]:
     return self._song_list
   
-  def find_by_id(self, id: int) -> Song:
+  def find_by_id(self, id: int) -> Song | None:
     for song in self._song_list:
       if song.id == id:
         return song
@@ -18,7 +18,7 @@ class SongRepository(SongRepository):
     self._song_list.append(song)
     return song
   
-  def update(self, song: Song) -> Song:
+  def update(self, song: Song) -> Song | None:
     for index, m in enumerate(self._song_list):
       if m.id == song.id:
         self._song_list[index] = song
