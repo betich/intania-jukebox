@@ -1,10 +1,15 @@
-from app.utils.singleton import Singleton
 from datetime import datetime
 import sys, traceback
 
-class Logger(Singleton):
+class Logger():
   def __init__(self):
     self.logs = []
+    
+  # singleton
+  def __new__(cls):
+    if not hasattr(cls, 'instance'):
+      cls.instance = super(Logger, cls).__new__(cls)
+    return cls.instance
   
   def log(self, message):
     self.logs.append(message)
