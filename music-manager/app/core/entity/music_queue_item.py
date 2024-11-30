@@ -22,6 +22,18 @@ class MusicQueueItem():
     
     return self.song.get_id() == other.song.get_id()
   
+  def __gt__(self, other) -> bool:
+    if not isinstance(other, MusicQueueItem):
+      return False
+    
+    return self.likes > other.likes
+  
+  def __lt__(self, other) -> bool:
+    if not isinstance(other, MusicQueueItem):
+      return False
+    
+    return self.likes < other.likes
+  
   def get_song(self) -> Song:
     return self.song
   
@@ -33,3 +45,6 @@ class MusicQueueItem():
   
   def set_likes(self, likes: int) -> None:
     self.likes = likes
+    
+  def like(self) -> None:
+    self.likes += 1
