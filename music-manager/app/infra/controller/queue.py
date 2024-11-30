@@ -1,5 +1,6 @@
 from flask import Blueprint,request
 
+from app.core.mapper.music_queue import MusicQueueMapper
 from app.core.mapper.music_queue_item import MusicQueueItemMapper
 from app.core.mapper.song import SongMapper
 from app.core.usecase.crud_music_queue_item import CRUDMusicQueueItem
@@ -24,7 +25,7 @@ music_queue_service = MusicQueueService(music_queue_item_repository)
 def get_queue():
   try:
     result = music_queue_service.get_queue()
-    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(result), "Found queue")
+    return FlaskResponseMapper.success(MusicQueueMapper.to_response(result), "Found queue")
   except Exception as e:
     logger.log_error(e)
     return FlaskResponseMapper.bad_request(str(e))
@@ -71,14 +72,14 @@ def add_song_to_queue():
         
       if result is not None:
         queue_result = music_queue_service.get_queue()
-        return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(queue_result), "Music added to queue")
+        return FlaskResponseMapper.success(MusicQueueMapper.to_response(queue_result), "Music added to queue")
     # song case
     elif 'song' in data and 'song_id' not in data:
       result = crud_music_queue_item.create_by_song(SongMapper.from_request(data['song']))
       
       if result is not None:
         queue_result = music_queue_service.get_queue()
-        return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(queue_result), "Music added to queue")
+        return FlaskResponseMapper.success(MusicQueueMapper.to_response(queue_result), "Music added to queue")
     
   except Exception as e:
     logger.log_error(e)

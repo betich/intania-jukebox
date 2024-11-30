@@ -17,7 +17,7 @@ class MusicQueueItemMapper():
   @staticmethod
   def to_dict(entity: MusicQueueItem) -> Dict:
     return {
-      'song': entity.get_song(),
+      'song': entity.get_song().to_dict(),
       'likes': entity.get_likes()
     }
     

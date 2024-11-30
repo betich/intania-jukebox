@@ -66,3 +66,15 @@ class Song():
 
   def set_cover(self, cover: str) -> None:
     self.cover = cover
+    
+  def to_dict(self) -> dict:
+    return {
+      'id': self.id,
+      'title': self.title,
+      'artist': self.artist,
+      'album': self.album,
+      'release_date': self.release_date,
+      'popularity': self.popularity,
+      'duration': self.duration,
+      'cover': self.cover
+    }

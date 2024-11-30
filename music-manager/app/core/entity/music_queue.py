@@ -5,7 +5,7 @@ from app.core.entity.music_queue_item import MusicQueueItem
 
 class MusicQueue():
   def __init__(self):
-    self.music_queue = PriorityQueue()
+    self.music_queue: PriorityQueue[MusicQueueItem] = PriorityQueue()
     
   def __str__(self) -> str:
     items = [str(item) for item in self.music_queue.queue]
@@ -13,7 +13,8 @@ class MusicQueue():
   
   def get_queue(self) -> List[MusicQueueItem]:
     # sort by likes
-    return sorted(self.music_queue.queue, key=lambda item: item.get_likes(), reverse=True)
+    # return sorted(self.music_queue.queue, key=lambda item: item.get_likes(), reverse=True)
+    return self.music_queue.queue
   
   def get_queue_size(self) -> int:
     return self.music_queue.qsize()
@@ -25,7 +26,7 @@ class MusicQueue():
     if not isinstance(item, MusicQueueItem):
       raise Exception("Item should be an instance of MusicQueueItem")
     
-    self.music_queue.put((item.get_likes(), item))
+    self.music_queue.put(item)
     
   def pop(self) -> MusicQueueItem:
     return self.music_queue.get()

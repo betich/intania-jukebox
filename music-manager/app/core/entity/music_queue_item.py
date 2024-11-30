@@ -48,3 +48,9 @@ class MusicQueueItem():
     
   def like(self) -> None:
     self.likes += 1
+    
+  def to_dict(self) -> dict:
+    return {
+      'song': self.song.to_dict(),
+      'likes': self.likes
+    }

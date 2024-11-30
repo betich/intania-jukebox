@@ -2,6 +2,7 @@ from app.core.repository.music_queue_item import MusicQueueItemRepository
 from app.core.entity.music_queue_item import MusicQueueItem
 from app.core.entity.music_queue import MusicQueue
 from app.core.entity.song import Song
+from typing import List
 
 class MusicQueueService():
   def __init__(self, music_queue_item_repository: MusicQueueItemRepository):
@@ -13,7 +14,7 @@ class MusicQueueService():
     for music in self.music_queue_item_repository.find_all():
       self.music_queue.push(music)
 
-  def get_queue(self) -> list[MusicQueueItem]:
+  def get_queue(self) -> List[MusicQueueItem]:
     self._sync_queue()
     return self.music_queue.get_queue()
   
