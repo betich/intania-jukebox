@@ -48,15 +48,15 @@ class MusicQueue():
   
   def get_queue_size(self) -> int:
     return self.queue.qsize()
-  
-  def push(self, music: Song) -> None:
-    if not music:
-      raise Exception("Music is required")
     
-    if not isinstance(music, Song):
-      raise Exception("Music should be an instance of Music")
+  def push(self, item: MusicQueueItem) -> None:
+    if not item:
+      raise Exception("Item is required")
     
-    self.queue.put((0, MusicQueueItem(music)))
+    if not isinstance(item, MusicQueueItem):
+      raise Exception("Item should be an instance of MusicQueueItem")
+    
+    self.queue.put((item.get_likes(), item))
     
   def pop(self) -> MusicQueueItem:
     return self.queue.get()

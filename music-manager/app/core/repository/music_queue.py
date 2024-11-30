@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from app.core.entity.music_queue import MusicQueue, MusicQueueItem
-
-class MusicQueueRepository(ABC):
+from app.core.entity.music_queue import MusicQueueItem
+  
+class MusicQueueItemRepository(ABC):
   @abstractmethod
-  def find_all(self) -> MusicQueue:
+  def find_all(self) -> MusicQueueItem:
     pass
 
   @abstractmethod
@@ -21,3 +21,4 @@ class MusicQueueRepository(ABC):
   @abstractmethod
   def delete(self, id: int) -> None:
     pass
+  
