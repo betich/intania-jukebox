@@ -16,7 +16,7 @@ logger = Logger()
 queue_controller = Blueprint('queue', __name__, url_prefix='/queue')
 
 song_repository = SongRepository()
-music_queue_item_repository = MusicQueueItemRepository()
+music_queue_item_repository = MusicQueueItemRepository(song_repository)
 crud_music_queue_item = CRUDMusicQueueItem(music_queue_item_repository, song_repository)
 
 music_queue_service = MusicQueueService(music_queue_item_repository)
