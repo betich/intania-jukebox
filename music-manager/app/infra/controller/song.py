@@ -20,7 +20,7 @@ def get_queue():
   else:
     return FlaskResponseMapper.success(SongMapper.to_dict_list(result), "Success")
 
-@song_controller.route('/<int:id>', methods=['GET'])
+@song_controller.route('/<id>', methods=['GET'])
 def get_queue_by_id(id):
   result = crud_song.find_by_id(id)
   
@@ -42,12 +42,12 @@ def create_queue():
     if result is None:
       return FlaskResponseMapper.bad_request("Song already exists")
     
-    return FlaskResponseMapper.success(SongMapper.to_dict(result), "Song added to queue")
+    return FlaskResponseMapper.success(SongMapper.to_dict(result), "Song added to database")
   
   except Exception as e:
     return FlaskResponseMapper.bad_request(str(e))
 
-@song_controller.route('/<int:id>', methods=['PUT'])
+@song_controller.route('/<id>', methods=['PUT'])
 def update_queue(id):
   data = request.json
   
@@ -65,7 +65,7 @@ def update_queue(id):
   except Exception as e:
     return FlaskResponseMapper.bad_request(str(e))
 
-@song_controller.route('/<int:id>', methods=['DELETE'])
+@song_controller.route('/<id>', methods=['DELETE'])
 def delete_queue(id):
   crud_song.delete(id)
   return FlaskResponseMapper.success(None, "Song deleted")

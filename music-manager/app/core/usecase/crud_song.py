@@ -10,8 +10,11 @@ class CRUDSong():
 
   def find_by_id(self, id: str) -> Song:
     return self.song_repository.find_by_id(id)
-
+  
   def create(self, song: Song) -> Song:
+    if self.song_repository.find_by_id(song.get_id()):
+      raise Exception("Song already exists")
+    
     return self.song_repository.create(song)
 
   def update(self, id: str, song: Song) -> Song:

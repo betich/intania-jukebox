@@ -42,6 +42,6 @@ class FlaskResponseMapper():
   @staticmethod
   def resource_not_found(message: Optional[str]) -> JSONResponse:
     if message:
-      return jsonify({ "message": f"{message} not found" }), 204
+      return jsonify({ "message": {message}, "content": [] }), 200
     else:
-      return jsonify({ "message": "Resource not found" }), 204
+      return jsonify({ "message": "Resource not found", "content": [] }), 200
