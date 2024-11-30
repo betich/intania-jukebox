@@ -65,7 +65,7 @@ def seed_song():
     
 def seed_music_queue_item():
   song_repository = SongRepository()
-  music_queue_item_repository = MusicQueueItemRepository()
+  music_queue_item_repository = MusicQueueItemRepository(song_repository)
   crud_music_queue_item = CRUDMusicQueueItem(music_queue_item_repository, song_repository)
   music_queue_service = MusicQueueService(music_queue_item_repository)
   
