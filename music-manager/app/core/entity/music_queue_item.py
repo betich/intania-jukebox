@@ -1,12 +1,8 @@
 from app.core.entity.song import Song
-from dataclasses import dataclass, field
-from typing import Any
+from functools import total_ordering
 
-@dataclass(order=True)
+@total_ordering
 class MusicQueueItem():
-  likes: int
-  song: Song=field(compare=False)
-  
   def __init__(self, song: Song, likes: int = 0):
     if not song:
       raise Exception("Music is required")
@@ -22,9 +18,15 @@ class MusicQueueItem():
   
   def __eq__(self, other) -> bool:
     if not isinstance(other, MusicQueueItem):
-      return False
+      return NotImplemented
     
     return self.song.get_id() == other.song.get_id()
+  
+  def __lt__(self, other) -> bool:
+    if not isinstance(other, MusicQueueItem):
+      return NotImplemented
+    
+    return self.likes > other.likes # workaround for PriorityQueue ordering
   
   def get_song(self) -> Song:
     return self.song
@@ -40,6 +42,7 @@ class MusicQueueItem():
     
   def like(self) -> None:
     self.likes += 1
+    self.priority = -self.likes
     
   def to_dict(self) -> dict:
     return {
