@@ -20,7 +20,7 @@ def get_queue():
   else:
     return FlaskResponseMapper.success(SongMapper.to_dict_list(result), "Success")
 
-@song_controller.route('/', methods=['POST'])
+@song_controller.route('/new', methods=['POST'])
 def create_queue():
   data = request.json
   

@@ -16,12 +16,21 @@ def get_queue():
   result = crud_music_queue_item.find_all()
   
   if not result:
-    return FlaskResponseMapper.resource_not_found("No music found")
+    return FlaskResponseMapper.resource_not_found("No music found in queue")
+  else:
+    return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(result), "Success")
+  
+@queue_controller.route('/song', methods=['GET'])
+def get_music_queue_item():
+  result = crud_music_queue_item.find_all()
+  
+  if not result:
+    return FlaskResponseMapper.resource_not_found("No music found in queue")
   else:
     return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict_list(result), "Success")
 
-@queue_controller.route('/', methods=['POST'])
-def create_queue():
+@queue_controller.route('/song/new', methods=['POST'])
+def create_music_queue_item():
   data = request.json
   
   if not data or not all(key in data for key in ['song', 'likes']):
@@ -38,8 +47,8 @@ def create_queue():
   
   return FlaskResponseMapper.bad_request("There was an error adding the music to the queue")
 
-@queue_controller.route('/<id>', methods=['GET'])
-def get_queue_by_id(id):
+@queue_controller.route('/song/<id>', methods=['GET'])
+def get_music_queue_item_by_id(id):
   result = crud_music_queue_item.find_by_id(id)
   
   if result is None:
@@ -47,8 +56,8 @@ def get_queue_by_id(id):
   else:
     return FlaskResponseMapper.success(MusicQueueItemMapper.to_dict(result), "Success")
 
-@queue_controller.route('/<id>', methods=['PUT'])
-def update_queue(id):
+@queue_controller.route('/song/<id>', methods=['PUT'])
+def update_music_queue_item(id):
   data = request.json
   
   if not data or not all(key in data for key in ['song', 'likes']):
@@ -65,8 +74,7 @@ def update_queue(id):
   except Exception as e:
     return FlaskResponseMapper.bad_request(str(e))
   
-  
-@queue_controller.route('/<id>', methods=['DELETE'])
-def delete_queue(id):
+@queue_controller.route('/song/<id>', methods=['DELETE'])
+def delete_music_queue_item(id):
   crud_music_queue_item.delete(id)
   return FlaskResponseMapper.success(None, "Music deleted")
