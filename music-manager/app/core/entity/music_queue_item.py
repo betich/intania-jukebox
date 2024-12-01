@@ -1,5 +1,8 @@
 from app.core.entity.song import Song
 from functools import total_ordering
+from itertools import count
+
+iterator = count()
 
 @total_ordering
 class MusicQueueItem():
@@ -12,6 +15,7 @@ class MusicQueueItem():
     
     self.song = song
     self.likes = likes
+    self.count = next(iterator)
     
   def __str__(self) -> str:
     return f"(MusicQueueItem: {self.song} | likes: {self.likes})"
@@ -26,7 +30,10 @@ class MusicQueueItem():
     if not isinstance(other, MusicQueueItem):
       return NotImplemented
     
-    return self.likes > other.likes # workaround for PriorityQueue ordering
+    # sort by likes then count
+    if self.likes == other.likes:
+      return self.count < other.count
+    return self.likes < other.likes
   
   def get_song(self) -> Song:
     return self.song
