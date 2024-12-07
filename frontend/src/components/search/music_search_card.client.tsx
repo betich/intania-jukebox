@@ -66,3 +66,20 @@ export default function MusicSearchCard({ song }: MusicSearchCardProps) {
     </button>
   );
 }
+
+export function MusicSearchCardSkeleton() {
+  return (
+    <div className="flex bg-white px-2 py-2 rounded-lg duration-300 transition-all ease-in-out hover:bg-slate-100 hover:border-slate-400 border-white border justify-between items-center">
+      <div className="flex gap-2 items-center">
+        <div className="rounded-md w-16 h-16 bg-gray-400 animate-pulse"></div>
+        <div className="flex flex-col gap-1 items-start justify-center">
+          <div className="w-40 h-3 bg-gray-400 rounded-sm animate-pulse"></div>
+          <div className="w-64 h-3 bg-gray-400 rounded-sm animate-pulse"></div>
+        </div>
+      </div>
+      <div className="flex flex-col items-center">
+        <div className="w-6 h-6 bg-gray-400 rounded-full animate-pulse"></div>
+      </div>
+    </div>
+  );
+}

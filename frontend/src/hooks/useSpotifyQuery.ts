@@ -1,21 +1,20 @@
 import { musicSearch } from "@/spotify/search";
 import { Song } from "@/stores/music";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export const useSpotifyQuery = ({ search }: { search: string }) => {
-  const [result, setResult] = useState<Song[]>([]);
-
-  useEffect(() => {
-    if (!search || search === "") {
-      return;
-    }
-    const result = musicSearch(search);
-    result.then((res) => {
-      setResult(res);
-    });
-  }, [search]);
+  const { isPending, error, data } = useQuery<Song[]>({
+    queryKey: ["musicSearch", search],
+    queryFn: async () => {
+      const data = await musicSearch(search);
+      return data;
+    },
+    enabled: true,
+  });
 
   return {
-    result,
+    isPending,
+    error,
+    data,
   };
 };

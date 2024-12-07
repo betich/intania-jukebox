@@ -10,6 +10,7 @@ export const env = createEnv({
   server: {
     CLIENT_ID: z.string(),
     CLIENT_SECRET: z.string().min(1),
+    API_BASE_URL: z.string().min(1),
   },
   /*
    * Environment variables available on the client (and server).
@@ -28,5 +29,6 @@ export const env = createEnv({
   runtimeEnv: {
     CLIENT_ID: process.env.CLIENT_ID,
     CLIENT_SECRET: process.env.CLIENT_SECRET,
+    API_BASE_URL: process.env.API_BASE_URL,
   },
 });
