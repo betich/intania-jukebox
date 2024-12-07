@@ -4,27 +4,36 @@ import { useState } from "react";
 import { RiThumbUpFill, RiThumbUpLine } from "react-icons/ri";
 
 interface MusicCardProps {
+  id: string;
   title: string;
   artist: string;
   duration: string;
   cover: string;
   position: number;
   likes: number;
+  likeMusic: (songId: string) => void;
 }
 
 export default function MusicCard({
+  id,
   title,
   artist,
   duration,
   position,
   likes,
   cover,
+  likeMusic,
 }: MusicCardProps) {
   const [isLiked, setIsLiked] = useState(false);
 
   return (
     <button
-      onClick={() => setIsLiked((l) => !l)}
+      onClick={() => {
+        if (!isLiked) {
+          likeMusic(id);
+          setIsLiked(() => true);
+        }
+      }}
       className="flex bg-white px-2 py-2 rounded-lg duration-300 transition-all ease-in-out hover:bg-slate-100 hover:border-slate-400 border-white border justify-between items-center"
     >
       <div className="flex gap-2 items-center">

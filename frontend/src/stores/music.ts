@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 export interface SongQueue {
+  id: string;
   position: number;
   likes: number;
   title: string;

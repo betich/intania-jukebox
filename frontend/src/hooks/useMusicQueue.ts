@@ -1,22 +1,11 @@
 "use client";
 
-import { addSongToQueue, getQueue } from "@/music_manager/fetch";
+import { addSongToQueue, getQueue, likeSong } from "@/music_manager/fetch";
 import { Song } from "@/stores/music";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 
-// import { useMusicStore } from "@/stores/music";
-// import { useEffect } from "react";
-
 export function useMusicQueue() {
-  // const musicStore = useMusicStore();
-  // const { music, setMusic, addMusic } = musicStore;
-
-  // useEffect(() => {
-  //   // Fetch music from server
-  //   // setMusic(mockMusic);
-  // }, [setMusic]);
-
   const { data, refetch, error, isLoading } = useQuery({
     queryKey: ["music"],
     queryFn: () => getQueue(),
@@ -31,10 +20,19 @@ export function useMusicQueue() {
     [refetch]
   );
 
+  const likeMusic = useCallback(
+    (songId: string) => {
+      likeSong(songId);
+      refetch();
+    },
+    [refetch]
+  );
+
   return {
     music: data,
     error,
     isLoading,
     addMusic,
+    likeMusic,
   };
 }

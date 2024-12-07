@@ -38,17 +38,17 @@ export async function addSongToQueue(song: Song) {
   }
 }
 
-export async function likeSong(song: Song) {
-  const url = formatAPIPath(`/queue/like/${song.id}`);
+export async function likeSong(songId: string) {
+  const url = formatAPIPath(`/queue/like/${songId}`);
 
   return fetch(url.toString(), {
-    method: "POST",
+    method: "PUT",
     mode: "cors",
   });
 }
 
-export async function unLikeSong(song: Song) {
-  const url = formatAPIPath(`/queue/unlike/${song.id}`);
+export async function unLikeSong(songId: string) {
+  const url = formatAPIPath(`/queue/unlike/${songId}`);
 
   return fetch(url.toString(), {
     method: "POST",

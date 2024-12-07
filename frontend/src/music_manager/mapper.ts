@@ -30,6 +30,7 @@ export function mapSongQueueResult(
   songQueueResult: SongQueueResult
 ): SongQueue[] {
   return songQueueResult.content.queue.map((queueItem) => ({
+    id: queueItem.song.id,
     position: queueItem.position,
     likes: queueItem.likes,
     title: queueItem.song.title,
