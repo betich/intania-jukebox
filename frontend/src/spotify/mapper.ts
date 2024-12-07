@@ -1,4 +1,4 @@
-import { Song } from "@/stores/music";
+import { Song, SongPayload } from "@/stores/music";
 
 interface SpotifySearchResult {
   tracks: {
@@ -56,7 +56,8 @@ export function testSchema(rawData: object): rawData is SpotifySearchResult {
     Array.isArray(rawData.tracks.items[0].album.images) &&
     "url" in rawData.tracks.items[0].album.images[0] &&
     "artists" in rawData.tracks.items[0] &&
-    Array.isArray(rawData.tracks.items[0].artists)
+    Array.isArray(rawData.tracks.items[0].artists) &&
+    rawData.tracks.items[0].id
   );
 }
 
@@ -83,5 +84,93 @@ export function parseSpotifySearchResult(rawData: SpotifySearchResult): Song[] {
     artist: track.artists.map((artist) => artist.name).join(", "),
     duration: formatDuration(track.duration_ms),
     cover: track.album.images[0].url,
+    id: track.id,
   }));
+}
+
+export function parseSpotifyTrackResult(
+  rawData: SpotifyTrackResult
+): SongPayload {
+  return {
+    title: rawData.name,
+    artist: rawData.artists.map((artist) => artist.name).join(", "),
+    duration: formatDuration(rawData.duration_ms),
+    cover: rawData.album.images[0].url,
+    release_date: rawData.album.release_date,
+    id: rawData.id,
+    album: rawData.album.name,
+    popularity: rawData.popularity,
+  };
+}
+
+export interface SpotifyTrackResult {
+  album: {
+    album_type: string;
+    total_tracks: number;
+    available_markets: string[];
+    external_urls: {
+      spotify: string;
+    };
+    href: string;
+    id: string;
+    images: {
+      url: string;
+      height: number;
+      width: number;
+    }[];
+    name: string;
+    release_date: string;
+    release_date_precision: string;
+    restrictions: {
+      reason: string;
+    };
+    type: string;
+    uri: string;
+    artists: {
+      external_urls: {
+        spotify: string;
+      };
+      href: string;
+      id: string;
+      name: string;
+      type: string;
+      uri: string;
+    }[];
+  };
+  artists: {
+    external_urls: {
+      spotify: string;
+    };
+    href: string;
+    id: string;
+    name: string;
+    type: string;
+    uri: string;
+  }[];
+  available_markets: string[];
+  disc_number: number;
+  duration_ms: number;
+  explicit: boolean;
+  external_ids: {
+    isrc: string;
+    ean: string;
+    upc: string;
+  };
+  external_urls: {
+    spotify: string;
+  };
+  href: string;
+  id: string;
+  is_playable: boolean;
+  linked_from: object;
+  restrictions: {
+    reason: string;
+  };
+  name: string;
+  popularity: number;
+  preview_url: string;
+  track_number: number;
+  type: string;
+  uri: string;
+  is_local: boolean;
 }

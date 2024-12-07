@@ -10,7 +10,6 @@ export const env = createEnv({
   server: {
     CLIENT_ID: z.string(),
     CLIENT_SECRET: z.string().min(1),
-    API_BASE_URL: z.string().min(1),
   },
   /*
    * Environment variables available on the client (and server).
@@ -19,6 +18,7 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+    NEXT_PUBLIC_API_BASE_URL: z.string().min(1),
   },
   /*
    * Due to how Next.js bundles environment variables on Edge and Client,
@@ -29,6 +29,6 @@ export const env = createEnv({
   runtimeEnv: {
     CLIENT_ID: process.env.CLIENT_ID,
     CLIENT_SECRET: process.env.CLIENT_SECRET,
-    API_BASE_URL: process.env.API_BASE_URL,
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
   },
 });

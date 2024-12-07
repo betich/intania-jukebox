@@ -1,5 +1,5 @@
 import { H2, H3 } from "@/components/common/typography";
-import { Song } from "@/stores/music";
+import { SongQueue } from "@/stores/music";
 import Image from "next/image";
 
 function PlayerSkeleton() {
@@ -16,7 +16,7 @@ function PlayerSkeleton() {
   );
 }
 
-export default function Player({ music }: { music: Song[] }) {
+export default function Player({ music }: { music: SongQueue[] }) {
   const song = music[0];
 
   if (song === undefined) return <PlayerSkeleton />;
@@ -30,6 +30,7 @@ export default function Player({ music }: { music: Song[] }) {
             width={288}
             height={288}
             alt={song.title}
+            priority
           />
         </div>
         <div className="flex flex-col items-center gap-0">

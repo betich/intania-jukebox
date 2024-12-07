@@ -1,13 +1,13 @@
 "use client";
 import { Player } from "@/components/music";
-import { useMusic } from "@/hooks/useMusic";
+import { useMusicQueue } from "@/hooks/useMusicQueue";
 
 export default function MusicPlayer() {
-  const { music } = useMusic();
+  const { music } = useMusicQueue();
 
   return (
     <div className="flex bg-red-50 flex-col items-center w-full pt-12 pb-6">
-      <Player music={music} />
+      <Player music={music ?? []} />
     </div>
   );
 }

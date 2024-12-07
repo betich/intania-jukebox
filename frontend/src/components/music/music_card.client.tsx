@@ -9,6 +9,7 @@ interface MusicCardProps {
   duration: string;
   cover: string;
   position: number;
+  likes: number;
 }
 
 export default function MusicCard({
@@ -16,6 +17,7 @@ export default function MusicCard({
   artist,
   duration,
   position,
+  likes,
   cover,
 }: MusicCardProps) {
   const [isLiked, setIsLiked] = useState(false);
@@ -35,6 +37,7 @@ export default function MusicCard({
           height={64}
           alt={title}
           className="rounded-md w-16 h-16"
+          priority
         ></Image>
         <div className="flex flex-col items-start">
           <p className="text-lg text-left font-bold text-black leading-none">
@@ -53,7 +56,7 @@ export default function MusicCard({
             <RiThumbUpLine className="text-slate-900 w-6 h-6" />
           )}
         </span>
-        <p className="text-xs font-bold trext-black">6</p>
+        <p className="text-xs font-bold trext-black">{likes}</p>
       </div>
     </button>
   );

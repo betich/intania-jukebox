@@ -1,5 +1,5 @@
 "use client";
-import { useMusic } from "@/hooks/useMusic";
+import { useMusicQueue } from "@/hooks/useMusicQueue";
 import { type Song } from "@/stores/music";
 import Image from "next/image";
 import { useCallback, useState } from "react";
@@ -11,7 +11,7 @@ interface MusicSearchCardProps {
 }
 
 export default function MusicSearchCard({ song }: MusicSearchCardProps) {
-  const { addMusic } = useMusic();
+  const { addMusic } = useMusicQueue();
   const [inQueue, setInQueue] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
 

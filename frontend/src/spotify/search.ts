@@ -1,7 +1,7 @@
 "use server";
 import { Song } from "@/stores/music";
 import { fetchWebApi } from "./fetch.server";
-import { parseSpotifySearchResult, testSchema } from "./adapter";
+import { parseSpotifySearchResult, testSchema } from "./mapper";
 
 export async function musicSearch(query: string): Promise<Song[]> {
   if (query === "") {

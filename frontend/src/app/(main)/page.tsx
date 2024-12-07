@@ -1,5 +1,10 @@
+import { QueryConsumer } from "@/components/common/QueryConsumer";
 import MainView from "./views/main";
 
 export default function Home() {
-  return <MainView />;
+  return (
+    <QueryConsumer>
+      <MainView />
+    </QueryConsumer>
+  );
 }
