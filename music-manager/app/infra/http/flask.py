@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from app.infra.http.swagger import swagger_ui_blueprint
 from app.infra.controller.home import home_controller
 from app.infra.controller.queue import queue_controller
@@ -11,6 +12,7 @@ def create_app():
 
 def run():
   app = create_app()
+  CORS(app)
   
   # routes
   app.register_blueprint(home_controller)
