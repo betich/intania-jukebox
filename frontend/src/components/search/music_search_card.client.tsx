@@ -1,34 +1,31 @@
 "use client";
-import { useMusicQueue } from "@/hooks/useMusicQueue";
-import { type Song } from "@/stores/music";
+import { SongQueue, type Song } from "@/stores/music";
 import Image from "next/image";
-import { useCallback, useState } from "react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { RiThumbUpFill, RiThumbUpLine } from "react-icons/ri";
 
 interface MusicSearchCardProps {
   song: Song;
+  music: SongQueue[];
+  addMusic: (song: Song) => void;
+  likeMusic: (songId: string) => void;
 }
 
-export default function MusicSearchCard({ song }: MusicSearchCardProps) {
-  const { addMusic } = useMusicQueue();
-  const [inQueue, setInQueue] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-
-  const handleAddMusic = useCallback(() => {
-    addMusic(song);
-    setInQueue(true);
-  }, [addMusic, song]);
-
-  const handleLike = useCallback(() => {
-    setIsLiked((l) => !l);
-  }, []);
+export default function MusicSearchCard({
+  song,
+  music,
+  likeMusic,
+  addMusic,
+}: MusicSearchCardProps) {
+  const inQueue = music.some((m) => m.id === song.id);
+  const isLiked = music.some((m) => m.id === song.id && m.likes > 0);
+  const likeCount = music.find((m) => m.id === song.id)?.likes || 0;
 
   return (
     <button
       onClick={() => {
-        if (inQueue) handleLike();
-        else handleAddMusic();
+        if (inQueue && !isLiked) likeMusic(song.id);
+        else if (!inQueue) addMusic(song);
       }}
       className="flex bg-white px-2 py-2 rounded-lg duration-300 transition-all ease-in-out hover:bg-slate-100 hover:border-slate-400 border-white border justify-between items-center"
     >
@@ -57,7 +54,7 @@ export default function MusicSearchCard({ song }: MusicSearchCardProps) {
             ) : (
               <RiThumbUpLine className="text-slate-900 w-6 h-6" />
             )}
-            <p className="text-xs font-bold trext-black">6</p>
+            <p className="text-xs font-bold trext-black">{likeCount}</p>
           </>
         ) : (
           <BsPlusCircleFill className="text-slate-900 hover:text-slate-500 druation-300 ease-in-out transition-colors w-6 h-6" />

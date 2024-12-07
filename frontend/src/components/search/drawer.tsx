@@ -1,4 +1,5 @@
 "use client";
+import { useMusicQueue } from "@/hooks/useMusicQueue";
 import { QueryConsumer } from "../common/QueryConsumer";
 import MusicSearchCard, {
   MusicSearchCardSkeleton,
@@ -7,6 +8,12 @@ import { useSpotifyQuery } from "@/hooks/useSpotifyQuery";
 
 function MusicSearch({ search }: { search: string }) {
   const { data: result, isPending, error } = useSpotifyQuery({ search });
+  const {
+    music,
+    isLoading: isMusicLoading,
+    addMusic,
+    likeMusic,
+  } = useMusicQueue();
 
   if (error) {
     return <div>There was a problem while fetching the music</div>;
@@ -14,13 +21,19 @@ function MusicSearch({ search }: { search: string }) {
 
   return (
     <div className="flex flex-col gap-1">
-      {isPending
+      {isPending || isMusicLoading
         ? Array.from({ length: 5 }).map((_, i) => (
             <MusicSearchCardSkeleton key={i} />
           ))
         : result &&
           result.map((m, i) => (
-            <MusicSearchCard key={`${i}-${m.title}`} song={m} />
+            <MusicSearchCard
+              key={`${i}-${m.title}`}
+              song={m}
+              music={music ?? []}
+              addMusic={addMusic}
+              likeMusic={likeMusic}
+            />
           ))}
     </div>
   );
