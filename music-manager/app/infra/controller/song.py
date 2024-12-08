@@ -3,7 +3,7 @@ from flask import Blueprint,request
 from app.core.usecase.crud_song import CRUDSong
 from app.core.mapper.song import SongMapper
 
-from app.infra.repository.memory.song import SongRepository
+from app.infra.repository.db.song import SongRepository
 from app.infra.mapper.response.flask import FlaskResponseMapper
 
 from app.utils.logger import Logger

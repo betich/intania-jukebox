@@ -1,10 +1,17 @@
 from flask import Flask
 from flask_cors import CORS
+
 from app.infra.http.swagger import swagger_ui_blueprint
+
 from app.infra.controller.home import home_controller
 from app.infra.controller.queue import queue_controller
 from app.infra.controller.music_queue_item import music_queue_item_controller
 from app.infra.controller.song import song_controller
+
+from app.infra.db.init import db
+from app.infra.db.model import Song, MusicQueueItem # for creating tables
+
+import os
 
 def create_app():
   app = Flask(__name__)  
@@ -13,6 +20,15 @@ def create_app():
 def run():
   app = create_app()
   CORS(app)
+  
+  app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('DATABASE_URI')
+  db.init_app(app)
+  
+  with app.app_context():
+    print('Creating tables...')
+    db.create_all()
+    
+  app.app_context().push()
   
   # routes
   app.register_blueprint(home_controller)
@@ -28,3 +44,5 @@ def run():
   # any other service instances should be created here
   
   app.run()
+  
+  return app

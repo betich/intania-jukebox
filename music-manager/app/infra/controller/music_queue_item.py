@@ -4,8 +4,8 @@ from app.core.usecase.crud_music_queue_item import CRUDMusicQueueItem
 from app.core.mapper.music_queue_item import MusicQueueItemMapper
 from app.core.mapper.song import SongMapper
 
-from app.infra.repository.memory.song import SongRepository
-from app.infra.repository.memory.music_queue_item import MusicQueueItemRepository
+from app.infra.repository.db.song import SongRepository
+from app.infra.repository.db.music_queue_item import MusicQueueItemRepository
 from app.infra.mapper.response.flask import FlaskResponseMapper
 
 from app.utils.logger import Logger
