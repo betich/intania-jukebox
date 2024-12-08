@@ -50,9 +50,7 @@ class MusicQueueItemRepository(MusicQueueItemRepository):
     return None
   
   def delete(self, id: str) -> None:
-    music_item = MusicQueueItemModel.query.filter_by(song_id=id).first()
-    if music_item:
-      db.session.delete(music_item)
-      db.session.commit()
+    MusicQueueItemModel.query.filter_by(song_id=id).delete()
+    db.session.commit()
     return
   
