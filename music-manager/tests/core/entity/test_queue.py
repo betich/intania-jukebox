@@ -11,7 +11,8 @@ def create_song():
     release_date="2021-01-01",
     popularity=100,
     duration=90000,
-    cover="https://cover.com"
+    cover="https://cover.com",
+    uri="spotify:track:46kspZSY3aKmwQe7O77fCC"
   )
 
 def test_queue_item():

@@ -10,7 +10,8 @@ def create_song():
     release_date="2021-01-01",
     popularity=100,
     duration=90000,
-    cover="Cover"
+    cover="Cover",
+    uri="spotify:track:46kspZSY3aKmw"
   )
 
 def create_song_without_album():
