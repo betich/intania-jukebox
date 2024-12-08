@@ -16,7 +16,8 @@ function generateRandomString(length: number) {
 function getSpotifyLoginPath() {
   const clientId = env.SPOTIFY_CLIENT_ID;
 
-  const scope = "streaming user-read-private user-read-email";
+  const scope =
+    "streaming user-read-private user-read-email user-read-playback-state";
   const state = generateRandomString(16);
 
   const redirectURI = env.SPOTIFY_REDIRECT_URI;

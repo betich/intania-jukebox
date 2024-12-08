@@ -21,6 +21,7 @@ export interface CurrentTrack extends Track {
 
 export interface PlayerInfo {
   currentTrack: CurrentTrack | null;
+  nextTrack: Track | null;
   trackWindow: {
     current_track: Track | null;
     next_tracks: Track[];
@@ -69,6 +70,7 @@ function mapCurrentTrack(
 
 export const usePlayerInfoStore = create<PlayerInfo>((set) => ({
   currentTrack: null,
+  nextTrack: null,
   trackWindow: {
     current_track: null,
     next_tracks: [],
