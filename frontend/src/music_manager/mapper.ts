@@ -1,5 +1,5 @@
 import { getTrack } from "@/spotify/getTrack";
-import { parseSpotifyTrackResult } from "@/spotify/mapper";
+import { formatDuration, parseSpotifyTrackResult } from "@/spotify/mapper";
 import { Song, SongPayload, SongQueue } from "@/stores/music";
 
 export async function songToSongPayload(song: Song): Promise<SongPayload> {
@@ -19,7 +19,13 @@ interface SongQueueResult {
     queue: {
       likes: number;
       position: number;
-      song: Song;
+      song: {
+        id: string;
+        title: string;
+        artist: string;
+        duration: number;
+        cover: string;
+      };
     }[];
     size: number;
   };
@@ -35,7 +41,7 @@ export function mapSongQueueResult(
     likes: queueItem.likes,
     title: queueItem.song.title,
     artist: queueItem.song.artist,
-    duration: queueItem.song.duration,
+    duration: formatDuration(queueItem.song.duration),
     cover: queueItem.song.cover,
   }));
 }

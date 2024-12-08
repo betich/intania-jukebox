@@ -65,7 +65,7 @@ function padZero(num: number): string {
   return num.toFixed(0).padStart(2, "0");
 }
 
-function formatDuration(duration_ms: number): string {
+export function formatDuration(duration_ms: number): string {
   if (duration_ms === 0) return "0:00";
 
   // if longer than an hour
@@ -94,7 +94,7 @@ export function parseSpotifyTrackResult(
   return {
     title: rawData.name,
     artist: rawData.artists.map((artist) => artist.name).join(", "),
-    duration: formatDuration(rawData.duration_ms),
+    duration: rawData.duration_ms,
     cover: rawData.album.images[0].url,
     release_date: rawData.album.release_date,
     id: rawData.id,

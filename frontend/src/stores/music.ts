@@ -18,9 +18,13 @@ export interface Song {
   cover: string;
 }
 
-export interface SongPayload extends Song {
-  release_date: string;
+export interface SongPayload {
   id: string;
+  title: string;
+  artist: string;
+  cover: string;
+  duration: number;
+  release_date: string;
   album: string;
   popularity: number;
 }
