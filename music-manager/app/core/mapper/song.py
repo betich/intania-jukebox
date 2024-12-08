@@ -1,7 +1,7 @@
 from app.core.entity.song import Song
 from typing import Dict, List
 
-SONG_KEYS = ["id", "title", "artist", "album", "release_date", "popularity", "duration", "cover"]
+SONG_KEYS = ["id", "title", "artist", "album", "release_date", "popularity", "duration", "cover", "uri"]
 
 class SongMapper():
   def __init__(self):
@@ -22,7 +22,8 @@ class SongMapper():
       release_date=song['release_date'],
       popularity=song['popularity'],
       duration=song['duration'],
-      cover=song['cover']
+      cover=song['cover'],
+      uri=song['uri']
     )
   
   @staticmethod
@@ -35,7 +36,8 @@ class SongMapper():
       "release_date": song.get_release_date(),
       "popularity": song.get_popularity(),
       "duration": song.get_duration(),
-      "cover": song.get_cover()
+      "cover": song.get_cover(),
+      "uri": song.get_uri()
     }
     
   @staticmethod

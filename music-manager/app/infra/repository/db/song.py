@@ -22,7 +22,8 @@ class SongRepository(SongRepository):
         cover=song.cover,
         album=song.album,
         popularity=song.popularity,
-        release_date=song.release_date
+        release_date=song.release_date,
+        uri=song.uri
       ))
     
     return songs
@@ -37,7 +38,8 @@ class SongRepository(SongRepository):
       cover=song.cover,
       album=song.album,
       popularity=song.popularity,
-      release_date=song.release_date
+      release_date=song.release_date,
+      uri=song.uri
     ) if song else None 
   
   def create(self, song: Song) -> Song:
@@ -50,8 +52,9 @@ class SongRepository(SongRepository):
       album=song.album,
       popularity=song.popularity,
       release_date=song.release_date,
+      uri=song.uri,
       created_at=func.now(),
-      updated_at=func.now()
+      updated_at=func.now(),
     )
   
     db.session.add(song_model)
@@ -78,7 +81,8 @@ class SongRepository(SongRepository):
         cover=song_model.cover,
         album=song_model.album,
         popularity=song_model.popularity,
-        release_date=song_model.release_date
+        release_date=song_model.release_date,
+        uri=song_model.uri
       )
     return None
   

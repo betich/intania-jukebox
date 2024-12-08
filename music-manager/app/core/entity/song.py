@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Song():
-  def __init__(self, id: str, title: str, artist: str, album: str, release_date: str, popularity: int, duration: int, cover: str):
+  def __init__(self, id: str, title: str, artist: str, album: str, release_date: str, popularity: int, duration: int, cover: str, uri: str):
     self.id = id
     self.title = title
     self.artist = artist
@@ -12,6 +12,7 @@ class Song():
     self.album = album
     self.popularity = popularity
     self.release_date = release_date
+    self.uri = uri
   
   def __str__(self) -> str:
     return f"{self.title} - {self.artist}"
@@ -46,6 +47,9 @@ class Song():
   def get_cover(self) -> str:
     return self.cover
   
+  def get_uri(self) -> str:
+    return self.uri
+  
   def set_title(self, title: str) -> None:
     self.title = title
     
@@ -67,6 +71,9 @@ class Song():
   def set_cover(self, cover: str) -> None:
     self.cover = cover
     
+  def set_uri(self, uri: str) -> None:
+    self.uri = uri
+    
   def to_dict(self) -> dict:
     return {
       'id': self.id,
@@ -76,5 +83,6 @@ class Song():
       'release_date': self.release_date,
       'popularity': self.popularity,
       'duration': self.duration,
-      'cover': self.cover
+      'cover': self.cover,
+      'uri': self.uri
     }

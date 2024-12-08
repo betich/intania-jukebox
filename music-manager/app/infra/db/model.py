@@ -18,6 +18,7 @@ class Song(db.Model):
   duration: Mapped[int] = mapped_column(Numeric)
   cover: Mapped[str] = mapped_column(String)
   album: Mapped[str] = mapped_column(String)
+  uri: Mapped[str] = mapped_column(String)
   popularity: Mapped[int] = mapped_column(Numeric)
   release_date: Mapped[str] = mapped_column(String)
   created_at: Mapped[str] = mapped_column(DateTime)

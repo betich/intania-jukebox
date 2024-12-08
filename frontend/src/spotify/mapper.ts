@@ -57,7 +57,8 @@ export function testSchema(rawData: object): rawData is SpotifySearchResult {
     "url" in rawData.tracks.items[0].album.images[0] &&
     "artists" in rawData.tracks.items[0] &&
     Array.isArray(rawData.tracks.items[0].artists) &&
-    rawData.tracks.items[0].id
+    rawData.tracks.items[0].id &&
+    rawData.tracks.items[0].uri
   );
 }
 
@@ -85,6 +86,7 @@ export function parseSpotifySearchResult(rawData: SpotifySearchResult): Song[] {
     duration: formatDuration(track.duration_ms),
     cover: track.album.images[0].url,
     id: track.id,
+    uri: track.uri,
   }));
 }
 
@@ -100,6 +102,7 @@ export function parseSpotifyTrackResult(
     id: rawData.id,
     album: rawData.album.name,
     popularity: rawData.popularity,
+    uri: rawData.uri,
   };
 }
 

@@ -14,7 +14,8 @@ SONGS = [
       cover='https://i.scdn.co/image/ab67616d0000b273528f5d5bc76597cd876e3cb2',
       album='album 1',
       popularity=100,
-      release_date='2021-01-01'
+      release_date='2021-01-01',
+      uri='spotify:track:4iV5W9uYEdYUVa79Axb7Rh'
     ),
     Song(
       id=uuid.uuid4().hex,
@@ -24,7 +25,8 @@ SONGS = [
       cover='https://i.scdn.co/image/ab67616d0000b273528f5d5bc76597cd876e3cb2',
       album='album 2',
       popularity=100,
-      release_date='2021-01-01'
+      release_date='2021-01-01',
+      uri='spotify:track:4iV5W9uYEdYUVa79Axb7Rh'
     ),
     Song(
       id=uuid.uuid4().hex,
@@ -34,7 +36,8 @@ SONGS = [
       cover='https://i.scdn.co/image/ab67616d0000b273528f5d5bc76597cd876e3cb2',
       album='album 3',
       popularity=100,
-      release_date='2021-01-01'
+      release_date='2021-01-01',
+      uri='spotify:track:4iV5W9uYEdYUVa79Axb7Rh'
     ),
     Song(
       id=uuid.uuid4().hex,
@@ -44,7 +47,8 @@ SONGS = [
       cover='https://i.scdn.co/image/ab67616d0000b273528f5d5bc76597cd876e3cb2',
       album='album 4',
       popularity=100,
-      release_date='2021-01-01'
+      release_date='2021-01-01',
+      uri='spotify:track:4iV5W9uYEdYUVa79Axb7Rh'
     ),
     Song(
       id=uuid.uuid4().hex,
@@ -54,7 +58,8 @@ SONGS = [
       cover='https://i.scdn.co/image/ab67616d0000b273528f5d5bc76597cd876e3cb2',
       album='album 5',
       popularity=100,
-      release_date='2021-01-01'
+      release_date='2021-01-01',
+      uri='spotify:track:4iV5W9uYEdYUVa79Axb7Rh'
     )
   ]
 

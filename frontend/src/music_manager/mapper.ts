@@ -25,6 +25,7 @@ interface SongQueueResult {
         artist: string;
         duration: number;
         cover: string;
+        uri: string;
       };
     }[];
     size: number;
@@ -43,5 +44,6 @@ export function mapSongQueueResult(
     artist: queueItem.song.artist,
     duration: formatDuration(queueItem.song.duration),
     cover: queueItem.song.cover,
+    uri: queueItem.song.uri,
   }));
 }

@@ -8,6 +8,7 @@ export interface SongQueue {
   artist: string;
   duration: string;
   cover: string;
+  uri: string;
 }
 
 export interface Song {
@@ -16,6 +17,7 @@ export interface Song {
   artist: string;
   duration: string;
   cover: string;
+  uri: string;
 }
 
 export interface SongPayload {
@@ -27,6 +29,7 @@ export interface SongPayload {
   release_date: string;
   album: string;
   popularity: number;
+  uri: string;
 }
 
 interface MusicState {
