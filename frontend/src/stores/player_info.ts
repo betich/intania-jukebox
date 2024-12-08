@@ -37,6 +37,8 @@ export interface PlayerInfo {
     nextTracks: RawTrack[],
     previousTracks: RawTrack[]
   ) => void;
+  isEmpty: boolean;
+  setIsEmpty: (isEmpty: boolean) => void;
 }
 
 function mapTrack(track: RawTrack): Track {
@@ -72,6 +74,7 @@ export const usePlayerInfoStore = create<PlayerInfo>((set) => ({
     next_tracks: [],
     prvious_tracks: [],
   },
+  isEmpty: true,
   setPlayerInfo: (playerInfo: Partial<PlayerInfo>) => set(playerInfo),
   setCurrentTrack: (track: RawTrack, position_ms: number, paused: boolean) =>
     set((state) => ({
@@ -81,6 +84,7 @@ export const usePlayerInfoStore = create<PlayerInfo>((set) => ({
         current_track: mapTrack(track),
       },
     })),
+  setIsEmpty: (isEmpty: boolean) => set({ isEmpty }),
   setTrackWindow: (
     currentTrack: RawTrack,
     nextTracks: RawTrack[],

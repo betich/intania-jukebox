@@ -10,6 +10,7 @@ export default function WebPlayback({ token }: { token: string }) {
     handlePreviousTrack,
     handleSetVolume,
     currentTrack,
+    isEmpty,
     trackWindow,
   } = usePlayer({ token });
 
@@ -46,7 +47,7 @@ export default function WebPlayback({ token }: { token: string }) {
           onChange={(e) => handleSetVolume(parseFloat(e.target.value))}
         />
 
-        {currentTrack && (
+        {currentTrack && !isEmpty ? (
           <div className="flex flex-col gap-2 items-center">
             <h2 className="font-bold">Current Track</h2>
             <Image
@@ -64,28 +65,32 @@ export default function WebPlayback({ token }: { token: string }) {
             </div>
             <p>{currentTrack.position}</p>
           </div>
+        ) : (
+          <h2 className="font-bold">No current track</h2>
         )}
 
-        <div className="flex flex-col gap-4">
-          <h2 className="font-bold">Next Tracks</h2>
-          {trackWindow.next_tracks.map((track) => (
-            <div key={track.id} className="flex gap-4">
-              <Image
-                width={48}
-                height={48}
-                src={track.cover}
-                alt={track.name}
-                className="rounded-sm"
-              />
-              <div className="flex flex-col">
-                <p>{track.name}</p>
-                <p>
-                  {track.artists} · {track.duration}
-                </p>
+        {!isEmpty && (
+          <div className="flex flex-col gap-4">
+            <h2 className="font-bold">Next Tracks</h2>
+            {trackWindow.next_tracks.map((track) => (
+              <div key={track.id} className="flex gap-4">
+                <Image
+                  width={48}
+                  height={48}
+                  src={track.cover}
+                  alt={track.name}
+                  className="rounded-sm"
+                />
+                <div className="flex flex-col">
+                  <p>{track.name}</p>
+                  <p>
+                    {track.artists} · {track.duration}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );

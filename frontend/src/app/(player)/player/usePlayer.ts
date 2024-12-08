@@ -22,8 +22,14 @@ interface Player {
 
 export function usePlayer({ token }: { token: string }) {
   const player = useRef<Player | null>(null);
-  const { currentTrack, trackWindow, setCurrentTrack, setTrackWindow } =
-    usePlayerInfoStore();
+  const {
+    currentTrack,
+    trackWindow,
+    isEmpty,
+    setIsEmpty,
+    setCurrentTrack,
+    setTrackWindow,
+  } = usePlayerInfoStore();
 
   useEffect(() => {
     //@ts-expect-error player is not defined
@@ -130,21 +136,22 @@ export function usePlayer({ token }: { token: string }) {
 
   const handleGetCurrentState = useCallback(() => {
     if (player.current) {
-      console.log("i am so triggered");
       player.current.getCurrentState().then((state) => {
         if (!state) {
           console.log("User is not playing music through the Web Playback SDK");
+          setIsEmpty(true);
           return;
         }
 
         const { current_track, next_tracks, previous_tracks } =
           state.track_window;
 
+        setIsEmpty(false);
         setCurrentTrack(current_track, state.position, state.paused);
         setTrackWindow(current_track, next_tracks, previous_tracks);
       });
     }
-  }, [player, setCurrentTrack, setTrackWindow]);
+  }, [player, setCurrentTrack, setTrackWindow, setIsEmpty]);
 
   useEffect(() => {
     // interval
@@ -208,5 +215,6 @@ export function usePlayer({ token }: { token: string }) {
     handleSetVolume,
     currentTrack,
     trackWindow,
+    isEmpty,
   };
 }
