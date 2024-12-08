@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     },
   });
 
-  if (response.ok) {
+  if (response.ok && response.status === 200) {
     return Response.json({ message: "token is valid" });
   } else {
     return Response.json({ message: "token is not valid" }, { status: 401 });

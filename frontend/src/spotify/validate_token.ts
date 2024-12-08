@@ -4,6 +4,10 @@ import { cookies } from "next/headers";
 export async function validateToken(): Promise<boolean> {
   const cookieStore = await cookies();
 
+  console.log("===");
+
+  console.log(cookieStore.getAll());
+
   const accessToken = cookieStore.get("access_token")?.value;
   const refreshToken = cookieStore.get("refresh_token")?.value;
 
@@ -16,7 +20,7 @@ export async function validateToken(): Promise<boolean> {
       Authorization: `Bearer ${accessToken}`,
     },
   }).then((response) => {
-    return response.ok;
+    return response.ok && response.status === 200;
   });
 
   if (isAccessTokenValid) {
@@ -32,18 +36,21 @@ export async function validateToken(): Promise<boolean> {
       }),
     });
 
-    if (response.ok) {
+    if (response.ok && response.status === 200) {
       const data = await response.json();
 
-      const tokenResponse = await fetch(formatClientURL("/auth/verify"), {
-        headers: {
-          Authorization: `Bearer ${data.access_token}`,
-        },
-      });
+      console.log(data);
 
-      if (tokenResponse.ok) {
-        return true;
-      }
+      // const tokenResponse = await fetch(formatClientURL("/auth/verify"), {
+      //   headers: {
+      //     Authorization: `Bearer ${data.access_token}`,
+      //   },
+      // });
+
+      // if (tokenResponse.ok && response.status === 200) {
+      //   return true;
+      // }
+      return true;
     }
   }
 

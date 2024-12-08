@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
   const { refresh_token: refreshToken } = await request.json();
@@ -33,22 +33,26 @@ export async function POST(request: Request) {
 
     const data = await response.json();
 
-    const tokenResponse = NextResponse.json({
-      access_token: data.access_token,
-    });
+    // save the token in a cookie
+    const cookieStore = await cookies();
 
-    tokenResponse.cookies.set("access_token", data.access_token, {
+    console.log("->>", data);
+
+    cookieStore.set("access_token", data.access_token, {
       expires: new Date(Date.now() + data.expires_in * 1000),
       domain: new URL(env.NEXT_PUBLIC_CLIENT_BASE_URL).hostname,
       httpOnly: true,
     });
 
-    tokenResponse.cookies.set("refresh_token", data.refresh_token, {
+    cookieStore.set("refresh_token", data.refresh_token, {
       expires: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
       domain: new URL(env.NEXT_PUBLIC_CLIENT_BASE_URL).hostname,
       httpOnly: true,
     });
 
-    return tokenResponse;
+    return Response.json({
+      message: "token is refreshed",
+      access_token: data.access_token,
+    });
   }
 }
