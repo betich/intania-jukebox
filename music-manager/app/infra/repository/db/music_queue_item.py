@@ -38,15 +38,16 @@ class MusicQueueItemRepository(MusicQueueItemRepository):
     db.session.commit()
     return music
   
-  def update(self, id: str, new_music: dict) -> MusicQueueItem | None:
-    music_item = MusicQueueItemModel.query.filter_by(song_id=id).first()
-    if music_item:
-      for key, value in new_music.items():
-        if hasattr(music_item, key):
-          setattr(music_item, key, value)
-      db.session.commit()
-      song = self.song_repository.find_by_id(music_item.song_id)
-      return MusicQueueItem(song, music_item.likes)
+  def update(self, song_id: str, new_music: dict) -> MusicQueueItem | None:
+    success = MusicQueueItemModel.query.filter_by(song_id=song_id).update(new_music)
+    db.session.commit()
+    
+    if success:
+      song = self.song_repository.find_by_id(song_id)
+      music_item = MusicQueueItemModel.query.filter_by(song_id=song_id).first()
+      if music_item:
+        return MusicQueueItem(song, int(music_item.likes))
+    return None
   
   def delete(self, id: str) -> None:
     music_item = MusicQueueItemModel.query.filter_by(song_id=id).first()
