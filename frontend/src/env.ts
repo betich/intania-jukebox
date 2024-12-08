@@ -8,8 +8,9 @@ export const env = createEnv({
    * Will throw if you access these variables on the client.
    */
   server: {
-    CLIENT_ID: z.string(),
-    CLIENT_SECRET: z.string().min(1),
+    SPOTIFY_CLIENT_ID: z.string(),
+    SPOTIFY_CLIENT_SECRET: z.string().min(1),
+    SPOTIFY_REDIRECT_URI: z.string().min(1),
   },
   /*
    * Environment variables available on the client (and server).
@@ -19,6 +20,7 @@ export const env = createEnv({
   client: {
     // NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
     NEXT_PUBLIC_API_BASE_URL: z.string().min(1),
+    NEXT_PUBLIC_CLIENT_BASE_URL: z.string().min(1),
   },
   /*
    * Due to how Next.js bundles environment variables on Edge and Client,
@@ -27,8 +29,10 @@ export const env = createEnv({
    * 💡 You'll get type errors if not all variables from `server` & `client` are included here.
    */
   runtimeEnv: {
-    CLIENT_ID: process.env.CLIENT_ID,
-    CLIENT_SECRET: process.env.CLIENT_SECRET,
+    SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+    SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
+    SPOTIFY_REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    NEXT_PUBLIC_CLIENT_BASE_URL: process.env.NEXT_PUBLIC_CLIENT_BASE_URL,
   },
 });

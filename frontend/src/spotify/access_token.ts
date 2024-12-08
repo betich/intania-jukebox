@@ -8,7 +8,9 @@ const authOptions = {
   headers: {
     Authorization:
       "Basic " +
-      Buffer.from(`${env.CLIENT_ID}:${env.CLIENT_SECRET}`).toString("base64"),
+      Buffer.from(
+        `${env.SPOTIFY_CLIENT_ID}:${env.SPOTIFY_CLIENT_SECRET}`
+      ).toString("base64"),
   },
   form: {
     grant_type: "client_credentials",

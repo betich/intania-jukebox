@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { IBM_Plex_Sans_Thai } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/common/header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,9 +32,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${ibmPlexSansThai.variable} antialiased bg-neutral-50`}
+        className={`${geistSans.variable} ${geistMono.variable} ${ibmPlexSansThai.variable} antialiased`}
       >
-        <Header />
         {children}
       </body>
     </html>
