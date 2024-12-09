@@ -6,7 +6,7 @@ The web-based Spotify Web API music player for Intania Chula, powered by raspber
 
 ### Music List
 
-![Queue](./docs/images/queue.jpg)
+![Queue](./docs/images/queue.png)
 
 ![Search](./docs/images/search.png)
 
