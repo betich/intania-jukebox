@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PlaybackState } from "./playback.type";
 import { usePlayerInfoStore } from "@/stores/player_info";
-import { getNextTrack, deleteTrack } from "./queue";
+import { getNextTrack as getCurrentTrack, deleteTrack } from "./queue";
 
 interface Player {
   activateElement: () => void;
@@ -157,7 +157,7 @@ export function usePlayer({ token }: { token: string }) {
           console.log("User is not playing music through the Web Playback SDK");
           setIsEmpty(true);
 
-          getNextTrack().then((track) => {
+          getCurrentTrack().then((track) => {
             play({
               spotify_uri: track.uri,
               position_ms: 0,
@@ -173,7 +173,7 @@ export function usePlayer({ token }: { token: string }) {
         // song has finished
         if (currentTrack && currentTrack?.duration_ms - state.position < 1000) {
           deleteTrack(currentTrack?.id ?? "").then(() => {
-            getNextTrack().then((track) => {
+            getCurrentTrack().then((track) => {
               play({
                 spotify_uri: track.uri,
                 position_ms: 0,
@@ -185,6 +185,18 @@ export function usePlayer({ token }: { token: string }) {
           });
           return;
         }
+
+        getCurrentTrack().then((track) => {
+          if (track.uri !== currentTrack?.uri) {
+            play({
+              spotify_uri: track.uri,
+              position_ms: 0,
+            }).then(() => {
+              player?.current?.activateElement();
+              console.log("Playing music!");
+            });
+          }
+        });
 
         const { current_track, next_tracks, previous_tracks } =
           state.track_window;
