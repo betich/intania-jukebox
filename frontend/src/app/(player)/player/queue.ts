@@ -38,7 +38,7 @@ export async function getUpcomingTracks(): Promise<Track[]> {
     throw new Error("Failed to get queue");
   }
 
-  return songQueueResult.content.queue.slice(5).map(mapSongQueueResult);
+  return songQueueResult.content.queue.slice(1, 6).map(mapSongQueueResult);
 }
 
 export async function deleteTrack(trackId: string) {

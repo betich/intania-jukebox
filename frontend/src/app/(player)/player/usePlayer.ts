@@ -2,7 +2,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PlaybackState } from "./playback.type";
 import { usePlayerInfoStore } from "@/stores/player_info";
-import { getNextTrack as getCurrentTrack, deleteTrack } from "./queue";
+import {
+  getNextTrack as getCurrentTrack,
+  deleteTrack,
+  getUpcomingTracks,
+} from "./queue";
 
 interface Player {
   activateElement: () => void;
@@ -54,6 +58,8 @@ export function usePlayer({ token }: { token: string }) {
     setIsEmpty,
     setCurrentTrack,
     setTrackWindow,
+    upcomingTracks,
+    setUpcomingTracks,
   } = usePlayerInfoStore();
 
   const play = useCallback(
@@ -198,6 +204,10 @@ export function usePlayer({ token }: { token: string }) {
           }
         });
 
+        getUpcomingTracks().then((tracks) => {
+          setUpcomingTracks(tracks);
+        });
+
         const { current_track, next_tracks, previous_tracks } =
           state.track_window;
 
@@ -214,6 +224,7 @@ export function usePlayer({ token }: { token: string }) {
     play,
     deviceId,
     currentTrack,
+    setUpcomingTracks,
   ]);
 
   useEffect(() => {
@@ -240,12 +251,23 @@ export function usePlayer({ token }: { token: string }) {
   const handleNextTrack = useCallback(() => {
     if (player.current) {
       player.current.activateElement();
-      player.current.nextTrack().then(() => {
-        console.log("Skipped to next track!");
+      // player.current.nextTrack().then(() => {
+      //   console.log("Skipped to next track!");
+      // });
+      deleteTrack(currentTrack!.id).then(() => {
+        getCurrentTrack().then((track) => {
+          play({
+            spotify_uri: track.uri,
+            position_ms: 0,
+          }).then(() => {
+            player?.current?.activateElement();
+            console.log("Playing music!");
+          });
+        });
       });
       handleGetCurrentState();
     }
-  }, [handleGetCurrentState]);
+  }, [handleGetCurrentState, currentTrack, play]);
 
   const handlePreviousTrack = useCallback(() => {
     if (player.current) {
@@ -293,5 +315,6 @@ export function usePlayer({ token }: { token: string }) {
     trackWindow,
     isEmpty,
     handleSeek,
+    upcomingTracks,
   };
 }

@@ -12,7 +12,8 @@ export default function WebPlayback({ token }: { token: string }) {
     // handleSeek,
     currentTrack,
     isEmpty,
-    trackWindow,
+    // trackWindow,
+    upcomingTracks,
   } = usePlayer({ token });
 
   return (
@@ -78,6 +79,7 @@ export default function WebPlayback({ token }: { token: string }) {
                   )
                 : 0
             }
+            readOnly
             disabled={!currentTrack}
             // onChange={(e) => setSeek(parseFloat(e.target.value))}
           />
@@ -100,7 +102,7 @@ export default function WebPlayback({ token }: { token: string }) {
         {!isEmpty && (
           <div className="flex flex-col gap-4">
             <h2 className="font-bold">Next Tracks</h2>
-            {trackWindow.next_tracks.map((track) => (
+            {upcomingTracks.map((track) => (
               <div key={track.id} className="flex gap-4">
                 <Image
                   width={48}
