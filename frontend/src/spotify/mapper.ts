@@ -72,7 +72,7 @@ export function formatDuration(duration_ms: number): string {
   // if longer than an hour
   const hours = Math.floor(duration_ms / 3600000);
   const minutes = Math.floor((duration_ms % 3600000) / 60000);
-  const seconds = ((duration_ms % 3600000) % 60000) / 1000;
+  const seconds = Math.floor(((duration_ms % 3600000) % 60000) / 1000);
 
   return duration_ms > 3600000
     ? `${hours}:${padZero(minutes)}:${padZero(seconds)}`
