@@ -41,6 +41,7 @@ export interface PlayerInfo {
   isEmpty: boolean;
   setIsEmpty: (isEmpty: boolean) => void;
   setUpcomingTracks: (upcomingTracks: Track[]) => void;
+  clear: () => void;
 }
 
 function mapTrack(track: RawTrack): Track {
@@ -101,4 +102,15 @@ export const usePlayerInfoStore = create<PlayerInfo>((set) => ({
       },
     })),
   setUpcomingTracks: (upcomingTracks: Track[]) => set({ upcomingTracks }),
+  clear: () =>
+    set({
+      currentTrack: null,
+      upcomingTracks: [],
+      trackWindow: {
+        current_track: null,
+        next_tracks: [],
+        prvious_tracks: [],
+      },
+      isEmpty: true,
+    }),
 }));

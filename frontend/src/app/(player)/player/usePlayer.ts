@@ -7,6 +7,8 @@ import {
   deleteTrack,
   getUpcomingTracks,
 } from "./queue";
+import { io, type Socket } from "socket.io-client";
+import { env } from "@/env";
 
 interface Player {
   activateElement: () => void;
@@ -26,27 +28,17 @@ interface Player {
   seek: (position_ms: number) => Promise<void>;
 }
 
-// const music = [
-//   "spotify:track:6UCFZ9ZOFRxK8oak7MdPZu",
-//   "spotify:track:2o1xmjsVeclBdIUaHdgBqY",
-//   "spotify:track:26ZmW8wIx2AK2zSTbp6kjK",
-//   "spotify:track:2OzLgMjZLmyUMNDbygy3ZE",
-//   "spotify:track:6WjIVghmttllN81FUd5sGe",
-//   "spotify:track:6uPnrBgweGOcwjFL4ItAvV",
-//   // TDSOTM
-//   "spotify:track:574y1r7o2tRA009FW0LE7v",
-//   "spotify:track:2ctvdKmETyOzPb2GiJJT53",
-//   "spotify:track:73OIUNKRi2y24Cu9cOLrzM",
-//   "spotify:track:3TO7bbrUKrOSPGRTB5MeCz",
-//   "spotify:track:2TjdnqlpwOjhijHCwHCP2d",
-//   "spotify:track:0vFOzaXqZHahrZp6enQwQb",
-//   "spotify:track:1TKTiKp3zbNgrBH2IwSwIx",
-//   "spotify:track:6FBPOJLxUZEair6x4kLDhf",
-//   "spotify:track:05uGBKRCuePsf43Hfm0JwX",
-//   "spotify:track:1tDWVeCR9oWGX8d5J9rswk",
-//   //
-//   "spotify:track:5JJPfHpByZ66XsEyCNVi2p",
-// ];
+export interface ServerToClientEvents {
+  // detect_color: (data: { data: string[] }) => void;
+  hello: () => void;
+  command: (data: {
+    command: "TOGGLE_PLAY" | "NEXT" | "VOLUME_UP" | "VOLUME_DOWN";
+  }) => void;
+}
+
+export interface ClientToServerEvents {
+  hi: () => void;
+}
 
 export function usePlayer({ token }: { token: string }) {
   const player = useRef<Player | null>(null);
@@ -60,6 +52,7 @@ export function usePlayer({ token }: { token: string }) {
     setTrackWindow,
     upcomingTracks,
     setUpcomingTracks,
+    clear,
   } = usePlayerInfoStore();
 
   const play = useCallback(
@@ -156,6 +149,14 @@ export function usePlayer({ token }: { token: string }) {
     // };
   }, [token, play]);
 
+  const clearEverything = useCallback(() => {
+    clear();
+    setIsEmpty(true);
+    if (player.current) {
+      player.current.togglePlay();
+    }
+  }, [clear, setIsEmpty]);
+
   const handleGetCurrentState = useCallback(() => {
     if (player.current && deviceId) {
       player.current.getCurrentState().then((state) => {
@@ -164,28 +165,42 @@ export function usePlayer({ token }: { token: string }) {
           setIsEmpty(true);
 
           getCurrentTrack().then((track) => {
+            if (!track) {
+              clearEverything();
+              return;
+            }
             play({
               spotify_uri: track.uri,
               position_ms: 0,
             }).then(() => {
               player?.current?.activateElement();
-              console.log("Playing music!");
+              console.log("[e] Playing music!");
             });
           });
 
           return;
         }
 
+        const { current_track, next_tracks, previous_tracks } =
+          state.track_window;
+
         // song has finished
-        if (currentTrack && currentTrack?.duration_ms - state.position < 1000) {
-          deleteTrack(currentTrack?.id ?? "").then(() => {
+        if (
+          current_track &&
+          current_track?.duration_ms - state.position < 1000
+        ) {
+          deleteTrack(current_track?.id ?? "").then(() => {
             getCurrentTrack().then((track) => {
+              if (!track) {
+                clearEverything();
+                return;
+              }
               play({
                 spotify_uri: track.uri,
                 position_ms: 0,
               }).then(() => {
                 player?.current?.activateElement();
-                console.log("Playing music!");
+                console.log("[f] Playing music!");
               });
             });
           });
@@ -193,13 +208,17 @@ export function usePlayer({ token }: { token: string }) {
         }
 
         getCurrentTrack().then((track) => {
-          if (track.uri !== currentTrack?.uri) {
+          if (!track) {
+            clearEverything();
+            return;
+          }
+          if (track?.uri !== current_track?.uri) {
             play({
               spotify_uri: track.uri,
               position_ms: 0,
             }).then(() => {
               player?.current?.activateElement();
-              console.log("Playing music!");
+              console.log("[mis] Playing music!");
             });
           }
         });
@@ -207,9 +226,6 @@ export function usePlayer({ token }: { token: string }) {
         getUpcomingTracks().then((tracks) => {
           setUpcomingTracks(tracks);
         });
-
-        const { current_track, next_tracks, previous_tracks } =
-          state.track_window;
 
         setIsEmpty(false);
         setCurrentTrack(current_track, state.position, state.paused);
@@ -223,8 +239,8 @@ export function usePlayer({ token }: { token: string }) {
     setIsEmpty,
     play,
     deviceId,
-    currentTrack,
     setUpcomingTracks,
+    clearEverything,
   ]);
 
   useEffect(() => {
@@ -244,9 +260,8 @@ export function usePlayer({ token }: { token: string }) {
       player.current.togglePlay().then(() => {
         console.log("Toggled playback!");
       });
-      handleGetCurrentState();
     }
-  }, [handleGetCurrentState]);
+  }, []);
 
   const handleNextTrack = useCallback(() => {
     if (player.current) {
@@ -254,20 +269,12 @@ export function usePlayer({ token }: { token: string }) {
       // player.current.nextTrack().then(() => {
       //   console.log("Skipped to next track!");
       // });
-      deleteTrack(currentTrack!.id).then(() => {
-        getCurrentTrack().then((track) => {
-          play({
-            spotify_uri: track.uri,
-            position_ms: 0,
-          }).then(() => {
-            player?.current?.activateElement();
-            console.log("Playing music!");
-          });
-        });
+      player.current.getCurrentState().then((state) => {
+        const currentTrack = state.track_window.current_track;
+        deleteTrack(currentTrack!.id);
       });
-      handleGetCurrentState();
     }
-  }, [handleGetCurrentState, currentTrack, play]);
+  }, []);
 
   const handlePreviousTrack = useCallback(() => {
     if (player.current) {
@@ -292,18 +299,59 @@ export function usePlayer({ token }: { token: string }) {
     }
   }, []);
 
-  const handleSeek = useCallback(
-    (percent: number) => {
-      if (player.current) {
+  const handleSeek = useCallback((percent: number) => {
+    if (player.current) {
+      player.current.getCurrentState().then((state) => {
+        const currentTrack = state.track_window.current_track;
         const progress_ms = (percent / 100) * currentTrack!.duration_ms;
 
-        player.current.seek(progress_ms).then(() => {
+        player?.current?.seek(progress_ms).then(() => {
           console.log("Seeked to", progress_ms);
         });
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+      env.NEXT_PUBLIC_API_BASE_URL
+    );
+
+    socket.on("connect", () => {
+      console.log("connected");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("disconnected");
+    });
+
+    socket.on("hello", () => {
+      console.log("hello from server :)");
+      socket.emit("hi");
+    });
+
+    socket.on("command", (data) => {
+      console.log("command", data);
+      switch (data.command) {
+        case "TOGGLE_PLAY":
+          handleTogglePlay();
+          break;
+        case "NEXT":
+          handleNextTrack();
+          break;
+        case "VOLUME_UP":
+          player.current?.getVolume().then((volume) => {
+            handleSetVolume(volume ? volume + 0.1 : 0.5);
+          });
+          break;
+        case "VOLUME_DOWN":
+          player.current?.getVolume().then((volume) => {
+            handleSetVolume(volume ? volume - 0.1 : 0.5);
+          });
+          break;
       }
-    },
-    [currentTrack]
-  );
+    });
+  }, [handleSetVolume, handleNextTrack, handleTogglePlay]);
 
   return {
     handleTogglePlay,

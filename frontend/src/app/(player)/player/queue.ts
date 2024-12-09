@@ -15,7 +15,7 @@ function mapSongQueueResult(queueItem: any): Track {
   };
 }
 
-export async function getNextTrack(): Promise<Track> {
+export async function getNextTrack(): Promise<Track | null> {
   const url = formatAPIPath("/queue");
   const songQueueResult = await fetch(url.toString(), {
     mode: "cors",
@@ -23,6 +23,10 @@ export async function getNextTrack(): Promise<Track> {
 
   if (!songQueueResult) {
     throw new Error("Failed to get queue");
+  }
+
+  if (songQueueResult.content.queue.length === 0) {
+    return null;
   }
 
   return mapSongQueueResult(songQueueResult.content.queue[0]);

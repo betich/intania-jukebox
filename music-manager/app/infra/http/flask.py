@@ -12,37 +12,57 @@ from app.infra.db.init import db
 from app.infra.db.model import Song, MusicQueueItem, PlayedSong # for creating tables
 
 import os
+from flask_socketio import SocketIO, emit
+from app.config.env import load_env
 
-def create_app():
-  app = Flask(__name__)  
-  return app
+from flask import request
 
-def run():
-  app = create_app()
+load_env()
+app = Flask(__name__)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('DATABASE_URI')
+app.config['SECRET_KEY'] = 'secret!'
+db.init_app(app)
+
+with app.app_context():
+  print('Creating tables...')
+  db.create_all()
   
-  app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('DATABASE_URI')
-  db.init_app(app)
-  
-  with app.app_context():
-    print('Creating tables...')
-    db.create_all()
+app.app_context().push()
+CORS(app)
+
+# socketio
+socketio = SocketIO(app, cors_allowed_origins=['http://localhost:3000'])
+
+# routes
+app.register_blueprint(home_controller)
+app.register_blueprint(queue_controller)
+app.register_blueprint(music_queue_item_controller)
+app.register_blueprint(song_controller)
+
+# swagger
+app.register_blueprint(swagger_ui_blueprint)
+
+print(app.url_map)
+
+# any other service instances should be created here
+@socketio.on('connect')
+def test_connect():
+  print('Client connected')
+  emit('hello',  {})
     
-  app.app_context().push()
-  CORS(app)
+@socketio.event
+def hi():
+  print('i got it!')
   
-  # routes
-  app.register_blueprint(home_controller)
-  app.register_blueprint(queue_controller)
-  app.register_blueprint(music_queue_item_controller)
-  app.register_blueprint(song_controller)
+@app.route('/sio/command')
+def command():
+  # TOGGLE_PLAY | NEXT | VOLUME_UP | VOLUME_DOWN
+  command = request.args.get('c')
   
-  # swagger
-  app.register_blueprint(swagger_ui_blueprint)
-
-  print(app.url_map)
-  
-  # any other service instances should be created here
-  
-  app.run(host='127.0.0.1', port=5002)
-  
-  return app
+  if command in ['TOGGLE_PLAY', 'NEXT', 'VOLUME_UP', 'VOLUME_DOWN']:
+    print('emit')
+    socketio.emit('command', {'command': command })
+    return 'OK'
+  else :
+    return 'Invalid command', 400
