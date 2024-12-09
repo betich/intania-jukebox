@@ -3,8 +3,8 @@
 import { addSongToQueue, getQueue, likeSong } from "@/music_manager/fetch";
 import { Song } from "@/stores/music";
 import { useQuery } from "@tanstack/react-query";
-import { useLocalStorage } from "@uidotdev/usehooks";
 import { useCallback } from "react";
+import { useLocalStorage } from "usehooks-ts";
 
 export function useMusicQueue() {
   const { data, refetch, error, isLoading } = useQuery({
