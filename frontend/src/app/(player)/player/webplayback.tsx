@@ -7,7 +7,7 @@ export default function WebPlayback({ token }: { token: string }) {
   const {
     handleTogglePlay,
     handleNextTrack,
-    handlePreviousTrack,
+    // handlePreviousTrack,
     handleSetVolume,
     // handleSeek,
     currentTrack,
@@ -41,23 +41,17 @@ export default function WebPlayback({ token }: { token: string }) {
         )}
 
         <div className="flex gap-4">
-          <button
+          {/* <button
             className="underline hover:no-underline"
             onClick={() => handlePreviousTrack()}
           >
             previous
+          </button> */}
+          <button className="text-2xl" onClick={() => handleTogglePlay()}>
+            {!currentTrack || currentTrack?.paused ? "▶️" : "⏸️"}
           </button>
-          <button
-            className="underline hover:no-underline"
-            onClick={() => handleTogglePlay()}
-          >
-            {!currentTrack || currentTrack?.paused ? "play" : "pause"}
-          </button>
-          <button
-            className="underline hover:no-underline"
-            onClick={() => handleNextTrack()}
-          >
-            next
+          <button className="text-2xl" onClick={() => handleNextTrack()}>
+            ➡️
           </button>
         </div>
 
