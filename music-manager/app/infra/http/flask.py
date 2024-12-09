@@ -43,6 +43,6 @@ def run():
   
   # any other service instances should be created here
   
-  app.run()
+  app.run(host='127.0.0.1', port=5002)
   
   return app

@@ -15,9 +15,9 @@ export default function QueuePreview() {
       </div>
       <div className="flex flex-col w-full gap-4">
         {music &&
-          music.map((m) => (
+          music.map((m, i) => (
             <MusicCard
-              key={`${m.position}-${m.title}`}
+              key={`${m.position}-${m.title}-${m.id}-${i}`}
               likeMusic={likeMusic}
               {...m}
             />

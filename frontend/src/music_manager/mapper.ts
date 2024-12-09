@@ -17,6 +17,7 @@ export async function songToSongPayload(song: Song): Promise<SongPayload> {
 interface SongQueueResult {
   content: {
     queue: {
+      id: string;
       likes: number;
       position: number;
       song: {
@@ -45,5 +46,6 @@ export function mapSongQueueResult(
     duration: formatDuration(queueItem.song.duration),
     cover: queueItem.song.cover,
     uri: queueItem.song.uri,
+    queueId: queueItem.id,
   }));
 }

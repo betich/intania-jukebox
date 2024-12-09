@@ -9,6 +9,7 @@ export interface SongQueue {
   duration: string;
   cover: string;
   uri: string;
+  queueId?: string;
 }
 
 export interface Song {

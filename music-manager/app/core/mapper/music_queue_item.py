@@ -1,5 +1,6 @@
 from app.core.entity.music_queue_item import MusicQueueItem
 from typing import Dict, List
+import uuid
 
 MUSIC_QUEUE_ITEM_KEYS = ['song', 'likes']
 
@@ -11,14 +12,16 @@ class MusicQueueItemMapper():
 
     return MusicQueueItem(
       song=data['song'],
-      likes=data['likes']
+      likes=data['likes'],
+      id=uuid.uuid4().hex
     )
 
   @staticmethod
   def to_dict(entity: MusicQueueItem) -> Dict:
     return {
       'song': entity.get_song().to_dict(),
-      'likes': entity.get_likes()
+      'likes': entity.get_likes(),
+      'id': entity.get_id()
     }
     
   @staticmethod

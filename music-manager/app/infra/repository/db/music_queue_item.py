@@ -17,7 +17,7 @@ class MusicQueueItemRepository(MusicQueueItemRepository):
     for item in music_items:
       song = self.song_repository.find_by_id(item.song_id)
       if song:
-        items.append(MusicQueueItem(song, int(item.likes)))
+        items.append(MusicQueueItem(item.id, song, int(item.likes)))
     return items
   
   
@@ -25,7 +25,7 @@ class MusicQueueItemRepository(MusicQueueItemRepository):
     music_item = MusicQueueItemModel.query.filter_by(song_id=id).first()
     if music_item:
       song = self.song_repository.find_by_id(music_item.song_id)
-      return MusicQueueItem(song, int(music_item.likes))
+      return MusicQueueItem(music_item.id, song, int(music_item.likes))
     return None
   
   def create(self, music: MusicQueueItem) -> MusicQueueItem:
@@ -46,7 +46,7 @@ class MusicQueueItemRepository(MusicQueueItemRepository):
       song = self.song_repository.find_by_id(song_id)
       music_item = MusicQueueItemModel.query.filter_by(song_id=song_id).first()
       if music_item:
-        return MusicQueueItem(song, int(music_item.likes))
+        return MusicQueueItem(music_item.id, song, int(music_item.likes))
     return None
   
   def delete(self, id: str) -> None:
