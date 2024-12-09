@@ -5,7 +5,7 @@ import { MusicCard } from "@/components/music";
 import { useMusicQueue } from "@/hooks/useMusicQueue";
 
 export default function QueuePreview() {
-  const { music, likeMusic } = useMusicQueue();
+  const { music, likeMusic, likes } = useMusicQueue();
 
   return (
     <div className="flex flex-col p-4 bg-white border gap-4 border-slate-300 max-w-screen-sm w-full rounded-lg">
@@ -19,6 +19,7 @@ export default function QueuePreview() {
             <MusicCard
               key={`${m.position}-${m.title}-${m.id}-${i}`}
               likeMusic={likeMusic}
+              isLiked={likes.includes(m.id)}
               {...m}
             />
           ))}

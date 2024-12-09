@@ -3,6 +3,7 @@ from app.core.repository.music_queue_item import MusicQueueItemRepository
 from app.core.repository.song import SongRepository
 from app.core.entity.song import Song
 from typing import List
+import uuid
 
 class CRUDMusicQueueItem():
   def __init__(self, music_queue_item_repository: MusicQueueItemRepository, song_repository: SongRepository):
@@ -24,7 +25,7 @@ class CRUDMusicQueueItem():
     if song_in_queue:
       raise Exception("Song already in queue")
     
-    music = MusicQueueItem(song)
+    music = MusicQueueItem(uuid.uuid4().hex, song)
     return self.music_queue_item_repository.create(music)
   
   def create_by_song(self, song: Song) -> MusicQueueItem:
@@ -37,7 +38,7 @@ class CRUDMusicQueueItem():
       # if not, create it
       self.song_repository.create(song)
     
-    music = MusicQueueItem(song)
+    music = MusicQueueItem(uuid.uuid4().hex, song)
     return self.music_queue_item_repository.create(music)
 
   def update(self, id: str, new_music: dict) -> MusicQueueItem | None:

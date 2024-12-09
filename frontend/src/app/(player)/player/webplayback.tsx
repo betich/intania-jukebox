@@ -102,8 +102,8 @@ export default function WebPlayback({ token }: { token: string }) {
         {!isEmpty && (
           <div className="flex flex-col gap-4">
             <h2 className="font-bold">Next Tracks</h2>
-            {upcomingTracks.map((track) => (
-              <div key={track.id} className="flex gap-4">
+            {upcomingTracks.map((track, i) => (
+              <div key={`${track.id}-${i}`} className="flex gap-4">
                 <Image
                   width={48}
                   height={48}

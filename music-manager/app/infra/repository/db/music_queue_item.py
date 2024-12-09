@@ -32,7 +32,7 @@ class MusicQueueItemRepository(MusicQueueItemRepository):
     music_item = MusicQueueItemModel(
       song_id=music.get_song().get_id(),
       likes=music.get_likes(),
-      id=str(uuid.uuid4())
+      id=music.get_id()
     )
     db.session.add(music_item)
     db.session.commit()

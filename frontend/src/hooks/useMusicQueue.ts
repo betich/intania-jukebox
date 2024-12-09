@@ -3,6 +3,7 @@
 import { addSongToQueue, getQueue, likeSong } from "@/music_manager/fetch";
 import { Song } from "@/stores/music";
 import { useQuery } from "@tanstack/react-query";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import { useCallback } from "react";
 
 export function useMusicQueue() {
@@ -11,6 +12,7 @@ export function useMusicQueue() {
     queryFn: () => getQueue(),
     refetchInterval: 1000,
   });
+  const [likes, setLikes] = useLocalStorage<string[]>("likes", []);
 
   const addMusic = useCallback(
     (song: Song) => {
@@ -21,11 +23,16 @@ export function useMusicQueue() {
   );
 
   const likeMusic = useCallback(
-    (songId: string) => {
-      likeSong(songId);
-      refetch();
+    (id: string) => {
+      if (likes.includes(id)) {
+        return;
+      } else {
+        likeSong(id);
+        setLikes((value) => [...value, id]);
+        refetch();
+      }
     },
-    [refetch]
+    [refetch, setLikes, likes]
   );
 
   return {
@@ -34,5 +41,6 @@ export function useMusicQueue() {
     isLoading,
     addMusic,
     likeMusic,
+    likes,
   };
 }

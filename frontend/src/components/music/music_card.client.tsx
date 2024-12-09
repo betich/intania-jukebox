@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
 import { RiThumbUpFill, RiThumbUpLine } from "react-icons/ri";
 
 interface MusicCardProps {
@@ -12,6 +11,7 @@ interface MusicCardProps {
   position: number;
   likes: number;
   likeMusic: (songId: string) => void;
+  isLiked: boolean;
 }
 
 export default function MusicCard({
@@ -23,15 +23,13 @@ export default function MusicCard({
   likes,
   cover,
   likeMusic,
+  isLiked,
 }: MusicCardProps) {
-  const [isLiked, setIsLiked] = useState(false);
-
   return (
     <button
       onClick={() => {
         if (!isLiked) {
           likeMusic(id);
-          setIsLiked(() => true);
         }
       }}
       className="flex bg-white px-2 py-2 rounded-lg duration-300 transition-all ease-in-out hover:bg-slate-100 hover:border-slate-400 border-white border justify-between items-center"
