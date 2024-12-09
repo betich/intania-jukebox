@@ -19,7 +19,7 @@ def test_queue_item():
   song = create_song()
   
   # add queue item
-  queue_item = MusicQueueItem(song=song, likes=0)
+  queue_item = MusicQueueItem(id="3", song=song, likes=0)
   
   assert queue_item.get_song() == song
   assert queue_item.get_likes() == 0
