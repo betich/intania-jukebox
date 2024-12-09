@@ -32,7 +32,7 @@ app.app_context().push()
 CORS(app)
 
 # socketio
-socketio = SocketIO(app, cors_allowed_origins=['http://localhost:3000'])
+socketio = SocketIO(app, cors_allowed_origins=['http://localhost:3000', 'https://radio.betich.me'])
 
 # routes
 app.register_blueprint(home_controller)
