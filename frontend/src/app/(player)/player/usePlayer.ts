@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PlaybackState } from "./playback.type";
 import { usePlayerInfoStore } from "@/stores/player_info";
+import { getNextTrack, deleteTrack } from "./queue";
 
 interface Player {
   activateElement: () => void;
@@ -21,31 +22,30 @@ interface Player {
   seek: (position_ms: number) => Promise<void>;
 }
 
-const music = [
-  "spotify:track:6UCFZ9ZOFRxK8oak7MdPZu",
-  "spotify:track:2o1xmjsVeclBdIUaHdgBqY",
-  "spotify:track:26ZmW8wIx2AK2zSTbp6kjK",
-  "spotify:track:2OzLgMjZLmyUMNDbygy3ZE",
-  "spotify:track:6WjIVghmttllN81FUd5sGe",
-  "spotify:track:6uPnrBgweGOcwjFL4ItAvV",
-  // TDSOTM
-  "spotify:track:574y1r7o2tRA009FW0LE7v",
-  "spotify:track:2ctvdKmETyOzPb2GiJJT53",
-  "spotify:track:73OIUNKRi2y24Cu9cOLrzM",
-  "spotify:track:3TO7bbrUKrOSPGRTB5MeCz",
-  "spotify:track:2TjdnqlpwOjhijHCwHCP2d",
-  "spotify:track:0vFOzaXqZHahrZp6enQwQb",
-  "spotify:track:1TKTiKp3zbNgrBH2IwSwIx",
-  "spotify:track:6FBPOJLxUZEair6x4kLDhf",
-  "spotify:track:05uGBKRCuePsf43Hfm0JwX",
-  "spotify:track:1tDWVeCR9oWGX8d5J9rswk",
-  //
-  "spotify:track:5JJPfHpByZ66XsEyCNVi2p",
-];
+// const music = [
+//   "spotify:track:6UCFZ9ZOFRxK8oak7MdPZu",
+//   "spotify:track:2o1xmjsVeclBdIUaHdgBqY",
+//   "spotify:track:26ZmW8wIx2AK2zSTbp6kjK",
+//   "spotify:track:2OzLgMjZLmyUMNDbygy3ZE",
+//   "spotify:track:6WjIVghmttllN81FUd5sGe",
+//   "spotify:track:6uPnrBgweGOcwjFL4ItAvV",
+//   // TDSOTM
+//   "spotify:track:574y1r7o2tRA009FW0LE7v",
+//   "spotify:track:2ctvdKmETyOzPb2GiJJT53",
+//   "spotify:track:73OIUNKRi2y24Cu9cOLrzM",
+//   "spotify:track:3TO7bbrUKrOSPGRTB5MeCz",
+//   "spotify:track:2TjdnqlpwOjhijHCwHCP2d",
+//   "spotify:track:0vFOzaXqZHahrZp6enQwQb",
+//   "spotify:track:1TKTiKp3zbNgrBH2IwSwIx",
+//   "spotify:track:6FBPOJLxUZEair6x4kLDhf",
+//   "spotify:track:05uGBKRCuePsf43Hfm0JwX",
+//   "spotify:track:1tDWVeCR9oWGX8d5J9rswk",
+//   //
+//   "spotify:track:5JJPfHpByZ66XsEyCNVi2p",
+// ];
 
 export function usePlayer({ token }: { token: string }) {
   const player = useRef<Player | null>(null);
-  const [index, setIndex] = useState(0); // tempp
   const [deviceId, setDeviceId] = useState<string | null>(null);
   const {
     currentTrack,
@@ -156,33 +156,33 @@ export function usePlayer({ token }: { token: string }) {
         if (!state) {
           console.log("User is not playing music through the Web Playback SDK");
           setIsEmpty(true);
-          console.log("index", index);
-          play({
-            spotify_uri: music[index],
-            position_ms: 0,
-          }).then(() => {
-            player?.current?.activateElement();
-            console.log("Playing music!");
+
+          getNextTrack().then((track) => {
+            play({
+              spotify_uri: track.uri,
+              position_ms: 0,
+            }).then(() => {
+              player?.current?.activateElement();
+              console.log("Playing music!");
+            });
           });
-          setIndex((prev) => prev + 1);
 
           return;
         }
 
         // song has finished
         if (currentTrack && currentTrack?.duration_ms - state.position < 1000) {
-          setTimeout(() => {
-            console.log("Song has finished!");
-            console.log("index", index);
-            play({
-              spotify_uri: music[index],
-              position_ms: 0,
-            }).then(() => {
-              player?.current?.activateElement();
-              console.log("Playing music!");
+          deleteTrack(currentTrack?.id ?? "").then(() => {
+            getNextTrack().then((track) => {
+              play({
+                spotify_uri: track.uri,
+                position_ms: 0,
+              }).then(() => {
+                player?.current?.activateElement();
+                console.log("Playing music!");
+              });
             });
-            setIndex((prev) => prev + 1);
-          }, 1000);
+          });
           return;
         }
 
@@ -200,7 +200,6 @@ export function usePlayer({ token }: { token: string }) {
     setTrackWindow,
     setIsEmpty,
     play,
-    index,
     deviceId,
     currentTrack,
   ]);
