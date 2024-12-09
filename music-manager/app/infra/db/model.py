@@ -38,3 +38,15 @@ class MusicQueueItem(db.Model):
   
   def __repr__(self) -> str:
     return f'<MusicQueueItem {self.id}>'
+  
+class PlayedSong(db.Model):
+  __tablename__ = 'played_songs'
+  
+  id: Mapped[str] = mapped_column(db.UUID, primary_key=True, unique=True)
+  likes: Mapped[int] = mapped_column(Numeric)
+  song_id: Mapped[str] = mapped_column(String, ForeignKey('songs.id'))
+  played_at: Mapped[str] = mapped_column(DateTime, default=func.now())
+  song = relationship('Song')
+  
+  def __repr__(self) -> str:
+    return f'<PlayedSongs {self.id}>'

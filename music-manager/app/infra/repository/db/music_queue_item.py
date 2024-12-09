@@ -2,7 +2,7 @@ from app.core.entity.music_queue_item import MusicQueueItem
 from app.core.repository.music_queue_item import MusicQueueItemRepository
 from app.core.repository.song import SongRepository
 from typing import List
-from app.infra.db.model import MusicQueueItem as MusicQueueItemModel
+from app.infra.db.model import MusicQueueItem as MusicQueueItemModel, PlayedSong
 from app.infra.db.init import db
 import uuid
 
@@ -50,7 +50,20 @@ class MusicQueueItemRepository(MusicQueueItemRepository):
     return None
   
   def delete(self, id: str) -> None:
+    music_item = MusicQueueItemModel.query.filter_by(song_id=id).first()
+    
     MusicQueueItemModel.query.filter_by(song_id=id).delete()
     db.session.commit()
+    
+    if music_item:
+      played_song = PlayedSong(
+        song_id=id,
+        likes=music_item.likes,
+        id=str(uuid.uuid4())
+      )
+      
+      db.session.add(played_song)
+      db.session.commit()
+    
     return
   
