@@ -2,9 +2,11 @@
 
 The web-based Spotify Web API music player for Intania Chula, powered by raspberry pi.
 
+![Architecture](./docs/images/architecture.png)
+
 ## Features
 
-### Music List
+### Music Selector
 
 ![Queue](./docs/images/queue.png)
 
@@ -24,7 +26,7 @@ The music is played through a speaker connected to the Raspberry Pi.
 
 ![Keypad](./docs/images/pico_keypad.jpg)
 
-Control the music player using a keypad.
+Control the music player using a Piminori Pico RGB Keypad.
 
 ## Apps
 
