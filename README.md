@@ -2,29 +2,31 @@
 
 The web-based Spotify Web API music player for Intania Chula, powered by raspberry pi.
 
-![Architecture](./docs/images/architecture.png)
+<p align="center">
+  <image width="750" alt="System Architecture" src="./docs/images/architecture.png">
+</p>
 
 ## Features
 
 ### Music Selector
 
-![Queue](./docs/images/queue.png)
-
-![Search](./docs/images/search.png)
+Music Selector Interface             |  Search Functionality
+:-------------------------:|:-------------------------:
+![Queue](./docs/images/queue.png)  |  ![Search](./docs/images/search.png)
 
 ### Music Player
 
-![Music Player](./docs/images/player.png)
+<image width="300" alt="Music Player" src="./docs/images/player.png">
 
 Play music from Spotify Web API, on the web (for Spotify Premium users only).
 
-![Speaker](./docs/images/speaker.jpg)
+<image width="300" alt="Speaker" src="./docs/images/speaker.jpg">
 
 The music is played through a speaker connected to the Raspberry Pi.
 
 ### Keypad
 
-![Keypad](./docs/images/pico_keypad.jpg)
+<image width="300" alt="Keypad" src="./docs/images/pico_keypad.jpg">
 
 Control the music player using a Piminori Pico RGB Keypad.
 
